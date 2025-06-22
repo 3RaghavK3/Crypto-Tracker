@@ -1,0 +1,49 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  background-color: #141414;
+  color: white;
+  border: 1px solid black;
+  padding: 12px 24px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  height: 50px;
+  gap: 8px;
+}
+
+.logo {
+  height: 100%;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 400;
+  font-family: 'Paytone One', sans-serif;
+}
+
+.nav {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .nav {
+    display: flex;
+    gap: 40px;
+    font-size: 1.5rem;
+    font-family: 'Afacad', sans-serif;
+    font-weight: 400;
+    border: 1px solid white;
+    padding: 4px 16px;
+    border-radius: 8px;
+  }
+}
+
+.theme-icon img {
+  width: 32px;
+  height: 32px;
+}

@@ -1,0 +1,81 @@
+import "./Global.css"
+import { useState, useEffect } from "react";
+
+export function Global() {
+  const [globalarray, settglobalarray] = useState(null);
+
+  useEffect(() => {
+    fetch("http://localhost:3000/get/global")
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        settglobalarray(data);
+      })
+      .catch((e) => console.log(e));
+  }, []);
+
+         
+      const formatNumber = (num) => {
+  return Number.isInteger(num) ? num : num.toFixed(2);
+};
+
+  return (
+    <>
+      <div className="widget" style={{ flex: 2, color: "white" }}>
+        <span className="title-name">Global</span>
+
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            height: "100%",
+          }}
+        >
+          <div
+            className="grid-wrapper"
+            style={{
+              display: "grid",
+              gridTemplateRows: "repeat(2, 1fr)",
+              gridTemplateColumns: "repeat(2, 1fr)",
+              gap: "10px",
+              padding: "5px",
+              backgroundColor: "black",
+            }}
+          >
+            {/* <div className="global-item">
+              <div className="global-title">Market-Cap</div>
+              <div className="value">
+                {globalarray ? `$${formatNumber(globalarray.total_market_cap.btc)}` : "Loading..."}
+              </div>
+            </div>
+
+            <div className="global-item">
+              <div className="global-title">Total Volume (24h)</div>
+              <div className="value">
+                {globalarray ? `$${formatNumber(globalarray.total_volume.usd)}` : "Loading..."}
+              </div>
+            </div>
+
+            <div className="global-item">
+              <div className="global-title">24h Market Cap Change (%)</div>
+              <div className="value">
+                {globalarray
+                  ? `${formatNumber(globalarray.market_cap_change_percentage_24h_usd)}%`
+                  : "Loading..."}
+              </div>
+            </div> */}
+
+            {/* <div className="global-item">
+              <div className="global-title">Active Cryptos</div>
+              <div className="value">
+                {globalarray ? formatNumber(globalarray.active_cryptocurrencies) : "Loading..."}
+              </div>
+            </div>
+          </div>
+
+          <div className="market-pie-chart">{/* Chart component here */}</div>
+        </div> */}
+      </div>
+    </>
+  );
+}

@@ -1,0 +1,27 @@
+.market-cap{
+    border:1px solid white;
+}
+
+
+.grid-wrapper{
+    flex:1
+}
+
+.market-pie-chart{
+     flex:1
+}
+
+
+.global-title{
+    font-size: 1rem;
+    border:1px solid white;
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.global-item{
+    border:1px solid white;
+    border-radius:10px;
+    background-color:#0D1421;
+}

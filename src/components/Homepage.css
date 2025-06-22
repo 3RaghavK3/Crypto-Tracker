@@ -1,0 +1,49 @@
+.grid-container{
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    height: 40vh;
+    width: 100%;
+    border: 1px solid red;
+}
+
+
+.widget{
+    position: relative;
+    background-color:#0D1421;
+    border: 1px solid black;
+    gap: 0px;
+    margin: 20px;
+    overflow-y: scroll;
+}
+
+
+
+.market-item{
+    display: flex;
+    border: 1px solid red;
+    width: 100%;
+    height: 50px;
+    color: white;
+    align-items: center;
+}
+
+
+td{
+    border: 1px solid blue;
+}
+
+table{
+    scrollbar-color: red;
+}
+
+.categories{
+    grid-column:span 3;
+}
+
+.title-name{
+      color: white ;
+      font-family: 'Afacad', sans-serif;
+      font-size: 1.5rem;
+}
+
