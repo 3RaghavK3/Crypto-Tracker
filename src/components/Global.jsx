@@ -42,7 +42,7 @@ export function Global() {
               backgroundColor: "black",
             }}
           >
-            {/* <div className="global-item">
+            <div className="global-item">
               <div className="global-title">Market-Cap</div>
               <div className="value">
                 {globalarray ? `$${formatNumber(globalarray.total_market_cap.btc)}` : "Loading..."}
@@ -65,7 +65,7 @@ export function Global() {
               </div>
             </div> */}
 
-            {/* <div className="global-item">
+            <div className="global-item">
               <div className="global-title">Active Cryptos</div>
               <div className="value">
                 {globalarray ? formatNumber(globalarray.active_cryptocurrencies) : "Loading..."}
@@ -73,8 +73,8 @@ export function Global() {
             </div>
           </div>
 
-          <div className="market-pie-chart">{/* Chart component here */}</div>
-        </div> */}
+          <div className="market-pie-chart"></div>
+        </div>
       </div>
     </>
   );
