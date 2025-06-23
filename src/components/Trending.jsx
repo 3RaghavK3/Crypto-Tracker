@@ -24,9 +24,7 @@ export function Trending(){
     return(
      
         <>
-                <div className="widget" style={{
-                    flex:1
-                }}>
+                <div className="widget">
                 <span className="title-name">Trending</span>
                 <table style={{
                     height:"100%",

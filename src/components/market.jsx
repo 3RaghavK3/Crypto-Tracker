@@ -1,6 +1,7 @@
 import { createElement, useEffect, useState } from "react";
 import "./Homepage.css"
 
+
 export function Market(){
         const [marketArray,setmarketarray]=useState(null);
         
@@ -15,9 +16,12 @@ export function Market(){
        .catch((e)=>console.log(e))
     }
    , []);
+
     
       const formatNumber = (num) => {
   return Number.isInteger(num) ? num : num.toFixed(2);
+
+        
 };
 
       return(
@@ -55,13 +59,14 @@ export function Market(){
                             <td>{coin.market_cap_rank}</td>
                              <td style={{
                                 fontSize:"1.5rem"
-                             }}>{coin.name} ({coin.symbol})</td>
+                             }}>{coin.name} ({coin.symbol.toUpperCase()})</td>
                           
                             <td>${formatNumber(coin.current_price)}</td>
 <td>{formatNumber(coin.price_change_24h)}</td>
 <td>{formatNumber(coin.market_cap)}</td>
 <td>{formatNumber(coin.total_volume)}</td>
-<td>{formatNumber(coin.circulating_supply)}</td>
+<td>{`${formatNumber(coin.circulating_supply)} ${coin.symbol.toUpperCase()}`}</td>
+
                         </tr>
                     )
                 })}

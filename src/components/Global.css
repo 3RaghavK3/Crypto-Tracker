@@ -4,11 +4,15 @@
 
 
 .grid-wrapper{
-    flex:1
+    flex:2
 }
 
 .market-pie-chart{
-     flex:1
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+     flex:1;
+     border: 1px solid red;
 }
 
 

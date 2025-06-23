@@ -1,5 +1,7 @@
 import "./Global.css"
 import { useState, useEffect } from "react";
+import { Market } from "./market";
+import { Marketpie } from "./Marketpie";
 
 export function Global() {
   const [globalarray, settglobalarray] = useState(null);
@@ -7,9 +9,9 @@ export function Global() {
   useEffect(() => {
     fetch("http://localhost:3000/get/global")
       .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        settglobalarray(data);
+      .then((json) => {
+        console.log(json.data);
+        settglobalarray(json.data);
       })
       .catch((e) => console.log(e));
   }, []);
@@ -22,7 +24,7 @@ export function Global() {
   return (
     <>
       <div className="widget" style={{ flex: 2, color: "white" }}>
-        <span className="title-name">Global</span>
+        {/* <span className="title-name">Global</span> */}
 
         <div
           style={{
@@ -39,7 +41,9 @@ export function Global() {
               gridTemplateColumns: "repeat(2, 1fr)",
               gap: "10px",
               padding: "5px",
+              border:"1px solid white",
               backgroundColor: "black",
+
             }}
           >
             <div className="global-item">
@@ -63,7 +67,7 @@ export function Global() {
                   ? `${formatNumber(globalarray.market_cap_change_percentage_24h_usd)}%`
                   : "Loading..."}
               </div>
-            </div> */}
+            </div> 
 
             <div className="global-item">
               <div className="global-title">Active Cryptos</div>
@@ -73,7 +77,8 @@ export function Global() {
             </div>
           </div>
 
-          <div className="market-pie-chart"></div>
+            <Marketpie info={globalarray}/>
+         
         </div>
       </div>
     </>

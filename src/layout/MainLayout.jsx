@@ -7,6 +7,7 @@ export function MainLayout({children}){
             display:"flex",
             flexDirection:"column",
             minHeight:"100vh",
+            maxHeight:"100vh",
             backgroundColor:"black"
         }}>
 
