@@ -1,6 +1,8 @@
 import { createElement, useEffect, useState } from "react";
 import "./Homepage.css";
 import star from "../assets/star.svg";
+import { SparkLine } from "./SparkLine";
+import { motion } from "framer-motion";
 
 export function Market() {
   const [marketArray, setmarketarray] = useState(null);
@@ -19,6 +21,13 @@ export function Market() {
     return Number.isInteger(num) ? num : num.toFixed(2);
   };
 
+ const checkTrend = (percentage) => {
+  if (percentage > 0) return ["#17D082", "⮝"];
+  else return ["#F43D46", "⮟"];
+};
+
+
+
   return (
     <>
       <div className="widget">
@@ -27,7 +36,6 @@ export function Market() {
             height: "100%",
             width: "100%",
             color: "white",
-          
             padding: 0,
             margin: 0,
             textAlign: "left",
@@ -42,15 +50,18 @@ export function Market() {
               <th></th>
               <th>#</th>
               <th>Name</th>
-              <th>Current Price</th>
-              <th>24h % Change</th>
+              <th>Price</th>
+              <th>1h %</th>
+              <th>24h %</th>
+              <th>7d %</th>
               <th>Market Cap</th>
               <th>Total Volume</th>
               <th>Circulating Supply</th>
+              <th style={{textAlign:"right"}}>Last 7 days</th>
             </tr>
           </thead>
 
-          <tbody>
+            <tbody>
             {marketArray?.map((coin) => {
               return (
                 <tr key={coin.id}>
@@ -94,11 +105,35 @@ export function Market() {
                     </div>
                   </td>
                   <td>${formatNumber(coin.current_price)}</td>
-                  <td>{formatNumber(coin.price_change_24h)}</td>
-                  <td>{formatNumber(coin.market_cap)}</td>
-                  <td>{formatNumber(coin.total_volume)}</td>
+                  {console.log(coin.price_change_percentage_7d_in_currency)}
+                  <td style={{
+  color: checkTrend(coin.price_change_percentage_1h_in_currency)[0] 
+}}>
+  {`${formatNumber(coin.price_change_percentage_1h_in_currency)}%
+ ${checkTrend(coin.price_change_percentage_1h_in_currency)[1] } `}
+</td>
+<td style={{
+  color: checkTrend(coin.price_change_percentage_24h_in_currency)[0]
+}}>
+  {`${formatNumber(coin.price_change_percentage_24h_in_currency)}%
+  ${checkTrend(coin.price_change_percentage_24h_in_currency)[1] } `}
+</td>
+                 <td style={{
+  color: checkTrend(coin.price_change_percentage_7d_in_currency)[0]
+}}>
+  {`${formatNumber(coin.price_change_percentage_7d_in_currency)}%
+  ${checkTrend(coin.price_change_percentage_7d_in_currency)[1] } `}
+</td>
+                  <td>{`$${formatNumber(coin.market_cap)}`}</td>
+                  <td>{`$${formatNumber(coin.total_volume)}`}</td>
                   <td>
                     {`${formatNumber(coin.circulating_supply)} ${coin.symbol.toUpperCase()}`}
+                  </td>
+
+                  <td>
+                    <SparkLine color={checkTrend(coin.price_change_percentage_7d_in_currency)} 
+                            prices={coin.sparkline_in_7d.price}
+                    />
                   </td>
                 </tr>
               );

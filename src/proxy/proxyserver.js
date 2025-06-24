@@ -8,13 +8,10 @@ const port = 3000;
 
 app.use(cors());
 
-const limiter = new Bottleneck({
-  minTime: 200, // 5 requests per second
-  maxConcurrent: 1
-});
+
 
 const links = {
-  market: "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=20&page=1",
+  market: "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&&sparkline=true&price_change_percentage=1h%2C24h%2C7d",
   trending: "https://api.coingecko.com/api/v3/search/trending",
   global: "https://api.coingecko.com/api/v3/global",
 };
@@ -33,9 +30,7 @@ app.get("/get/:id", async (req, res) => {
 app.get("/coinchart/:coin", async (req, res) => {
   const coin = req.params.coin;
   try {
-    const data = await limiter.schedule(() =>
-      fetchData(`https://api.coingecko.com/api/v3/coins/${coin}/market_chart?vs_currency=usd&days=7`)
-    );
+    const data = await fetchData(`https://api.coingecko.com/api/v3/coins/${coin}/market_chart?vs_currency=usd&days=7`);
     res.json(data);
   } catch (err) {
     console.error("Chart Fetch Error:", coin, err.message);

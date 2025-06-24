@@ -1,5 +1,9 @@
 *{
-    font-size: 14px;
+    font-size: 16px;
+}
+
+html{
+    background-color: black;
 }
 
 .grid-container{
@@ -18,15 +22,20 @@
     border: 1px solid black;
     gap: 0px;
     margin: 20px;
-    overflow-y: scroll;
+    
 }
+
+
 
 td{
     height: 75px;
+    width: 150px;
+    word-wrap: break-word;
     font-size: 1rem;
     font-weight: 500;
      border-bottom: 1px solid rgba(128, 128, 128, 0.42);
      border-top: 1px solid rgba(128, 128, 128, 0.42);
+    text-align: center;
 }
 
 th{ 
@@ -35,8 +44,13 @@ th{
 }
 tr{
     font-weight: 700;
+    
 }
 
+tbody tr:hover {
+  cursor: pointer;
+  border: 1px solid white
+}
 .symbol-coin{
     height: 30px;
 

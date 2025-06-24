@@ -24,7 +24,9 @@ export function Trending(){
     return(
      
         <>
-                <div className="widget">
+                <div className="widget" style={{
+                    overflowY:"scroll"
+                }}>
                 <span className="title-name">Trending</span>
                 <table style={{
                     height:"100%",
