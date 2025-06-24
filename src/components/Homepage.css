@@ -1,10 +1,14 @@
+*{
+    font-size: 14px;
+}
+
 .grid-container{
     display: flex;
     flex-direction: row;
     padding: 10px;
     height: 300px;
     width: 100%;
-    border: 1px solid red;
+   
 }
 
 
@@ -17,25 +21,40 @@
     overflow-y: scroll;
 }
 
+td{
+    height: 75px;
+    font-size: 1rem;
+    font-weight: 500;
+     border-bottom: 1px solid rgba(128, 128, 128, 0.42);
+     border-top: 1px solid rgba(128, 128, 128, 0.42);
+}
 
+th{ 
+    border-top: 1px solid rgba(128, 128, 128, 0.42);
+    height: 50px;
+}
+tr{
+    font-weight: 700;
+}
 
+.symbol-coin{
+    height: 30px;
+
+}
+
+.inter-text{
+     font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
 .market-item{
     display: flex;
-    border: 1px solid red;
     width: 100%;
     height: 50px;
     color: white;
     align-items: center;
 }
 
-
-td{
-    border: 1px solid blue;
-}
-
-table{
-    scrollbar-color: red;
-}
 
 .categories{
     grid-column:span 3;

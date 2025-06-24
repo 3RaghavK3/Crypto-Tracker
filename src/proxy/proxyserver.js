@@ -33,7 +33,6 @@ app.get("/get/:id", async (req, res) => {
 app.get("/coinchart/:coin", async (req, res) => {
   const coin = req.params.coin;
   try {
-    console.log(`🛰️ API Request for chart: ${coin}`)
     const data = await limiter.schedule(() =>
       fetchData(`https://api.coingecko.com/api/v3/coins/${coin}/market_chart?vs_currency=usd&days=7`)
     );
