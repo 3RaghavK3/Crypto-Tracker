@@ -23,7 +23,7 @@ export function Global() {
 
   return (
     <>
-      <div className="widget" style={{ flex: 2, color: "white" }}>
+      <div className="widget inter-text" style={{ flex: 2, color: "white" }}>
         {/* <span className="title-name">Global</span> */}
 
         <div
@@ -47,7 +47,9 @@ export function Global() {
             }}
           >
             <div className="global-item">
-              <div className="global-title">Market-Cap</div>
+              <div className="global-title" style={{
+                fontSize:"30px",fontWeight:"500"
+              }}>Market-Cap</div>
               <div className="value">
                 {globalarray ? `$${formatNumber(globalarray.total_market_cap.btc)}` : "Loading..."}
               </div>

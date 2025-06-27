@@ -8,13 +8,25 @@ const port = 3000;
 
 app.use(cors());
 
-
-
 const links = {
-  market: "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&&sparkline=true&price_change_percentage=1h%2C24h%2C7d",
   trending: "https://api.coingecko.com/api/v3/search/trending",
   global: "https://api.coingecko.com/api/v3/global",
 };
+
+app.get("/market", async (req, res) => {
+  const page = req.query.page;
+  const perPage = req.query.perPage;
+
+  try {
+    const data = await fetchData(
+      `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=${perPage}&page=${page}&sparkline=true&price_change_percentage=1h%2C24h%2C7d&precision=2`
+    );
+    res.json(data);
+  } catch (err) {
+    console.error("Backend Error:", err.message);
+    res.status(500).json({ error: "failed to fetch data" });
+  }
+});
 
 app.get("/get/:id", async (req, res) => {
   const path = req.params.id;

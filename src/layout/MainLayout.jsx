@@ -1,5 +1,6 @@
 import { Header } from "../components/Header";
-
+import { Footer } from "../components/Footer";
+import { FooterProvider } from "../context/footercontext";
 export function MainLayout({children}){
     return(
         <>
@@ -7,12 +8,14 @@ export function MainLayout({children}){
             display:"flex",
             flexDirection:"column",
             minHeight:"100vh",
-            maxHeight:"100vh",
             backgroundColor:"black"
         }}>
 
         <Header/>
         {children}
+       
+             <Footer/>
+        
        
         </div>
         </>

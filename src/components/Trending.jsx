@@ -49,7 +49,7 @@ export function Trending(){
                 </thead>
 
                 
-                <tbody>
+                <tbody className="inter-text">
                  {trendingArray?.map(coin => {
                     return(
                         <tr  key={coin.item.id}>

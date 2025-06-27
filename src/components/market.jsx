@@ -1,21 +1,24 @@
-import { createElement, useEffect, useState } from "react";
+import { createElement, useEffect, useState ,useContext} from "react";
 import "./Homepage.css";
 import star from "../assets/star.svg";
 import { SparkLine } from "./SparkLine";
-import { motion } from "framer-motion";
+import { footercontext } from "../context/footercontext";
+
 
 export function Market() {
   const [marketArray, setmarketarray] = useState(null);
+  const { page, setPage, perPage, setPerPage } = useContext(footercontext);
+  
 
-  useEffect(() => {
-    fetch("http://localhost:3000/get/market")
+    useEffect(() => {
+    fetch(`http://localhost:3000/market?page=${page}&perPage=${perPage}`)
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
         setmarketarray(data);
       })
       .catch((e) => console.log(e));
-  }, []);
+  }, [page,perPage]);
 
   const formatNumber = (num) => {
     return Number.isInteger(num) ? num : num.toFixed(2);

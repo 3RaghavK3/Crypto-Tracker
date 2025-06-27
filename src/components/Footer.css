@@ -1,0 +1,26 @@
+.footer{
+    height:50px;
+    display: flex;
+    padding-right: 10px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.pagination{
+    border:1px solid red;
+    height: 50%;
+    width: fit-content;
+}
+
+.display-count{
+    background-color: black;
+    border: 1px solid rgba(128, 128, 128, 0.42);
+    height: 50%;
+
+}
+
+option{
+    background-color: black;
+    color: white;
+}

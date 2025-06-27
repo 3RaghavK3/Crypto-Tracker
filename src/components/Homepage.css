@@ -20,8 +20,6 @@ html{
     position: relative;
     background-color:#0D1421;
     border: 1px solid black;
-    gap: 0px;
-    margin: 20px;
     
 }
 
@@ -41,6 +39,7 @@ td{
 th{ 
     border-top: 1px solid rgba(128, 128, 128, 0.42);
     height: 50px;
+    text-align: center;
 }
 tr{
     font-weight: 700;
