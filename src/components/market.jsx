@@ -21,7 +21,10 @@ export function Market() {
   }, [page,perPage]);
 
   const formatNumber = (num) => {
-    return Number.isInteger(num) ? num : num.toFixed(2);
+    return typeof num=="number" 
+    ? num.toLocaleString({minimumFractionDigits:2,maximumFractionDigits:2})
+    : "Loading"
+ 
   };
 
  const checkTrend = (percentage) => {

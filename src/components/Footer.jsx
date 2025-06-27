@@ -9,10 +9,38 @@ export function Footer() {
     setPerPage(Number(e.target.value)); 
   };
 
+
+  function goToTop() {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth',
+  });
+}
+
+
+  const changepage=(e)=>{
+     if(e.target.id=="previous"){
+        if(page==1){
+            window.alert("Already in the first page")
+            return
+        }
+         setPage(page-1)
+     }
+     else{
+        setPage(page+1)
+     }
+     goToTop()
+
+  }  
   return (
     <div className="footer widget">
       <div className="ghost">x</div>
-      <div className="pagination">x</div>
+      <div className="pagination">
+
+        <div id="previous" className="button" onClick={changepage}>{'\u2190'}</div>
+            {page}
+        <div id="next" className="button" onClick={changepage}>{'\u2192'}</div>
+      </div>
       <div className="display-count">
         <select
           name="perpage-div"

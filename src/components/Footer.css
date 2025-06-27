@@ -11,6 +11,14 @@
     border:1px solid red;
     height: 50%;
     width: fit-content;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    width: 100px;
+}
+
+.button{
+    cursor: pointer;
 }
 
 .display-count{
