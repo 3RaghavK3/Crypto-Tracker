@@ -4,17 +4,25 @@
     padding-right: 10px;
     justify-content: space-between;
     align-items: center;
+    font-size: 1.5rem;
 }
 
 
 .pagination{
-    border:1px solid red;
+  
     height: 50%;
     width: fit-content;
     color: white;
     display: flex;
     justify-content: space-between;
     width: 100px;
+}
+
+.page-style{
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .button{
