@@ -6,26 +6,20 @@ import './Header.css';
 export function Header() {
   return (
     <header className="header">
-      {/* Left Logo + Title */}
+
       <div className="header-left">
         <img src={logo} className="logo" alt="Logo" />
         <span className="title">CRYPTO.</span>
       </div>
 
-      {/* Navigation Links */}
-      <nav className="nav">
-        <span>Home</span>
-        <span>Market</span>
-        <span>Compare</span>
-        <span>Categories</span>
-        <span>Movers</span>
-        <span>New</span>
-      </nav>
-
-      {/* Sun Icon */}
-      <div className="theme-icon">
-        <img src={sun} alt="Sun" />
+      <div className="nav">
+          <span>Market</span>
+          <span>Compare</span>
+          <div className="theme-icon">
+            <img src={sun} alt="Sun" />
+          </div>
       </div>
+
     </header>
   );
 }
