@@ -1,13 +1,13 @@
-import "./Global.css"
-import { useState, useEffect } from "react";
-import { Market } from "./market";
-import { Marketpie } from "./Marketpie";
+import './Global.css';
+import { useState, useEffect } from 'react';
+import { Market } from './market';
+import { Marketpie } from './Marketpie';
 
 export function Global() {
   const [globalarray, settglobalarray] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:3000/get/global")
+    fetch('http://localhost:3000/get/global')
       .then((res) => res.json())
       .then((json) => {
         console.log(json.data);
@@ -16,49 +16,53 @@ export function Global() {
       .catch((e) => console.log(e));
   }, []);
 
-         
-      const formatNumber = (num) => {
-  return Number.isInteger(num) ? num : num.toFixed(2);
-};
+  const formatNumber = (num) => {
+    return Number.isInteger(num) ? num : num.toFixed(2);
+  };
 
   return (
     <>
-      <div className="widget inter-text" style={{ flex: 2, color: "white" }}>
+      <div className="widget inter-text" style={{ flex: 2, color: 'white' }}>
         {/* <span className="title-name">Global</span> */}
 
         <div
           style={{
-            display: "flex",
-            flexDirection: "row",
-            height: "100%",
+            display: 'flex',
+            flexDirection: 'row',
+            height: '100%',
           }}
         >
           <div
             className="grid-wrapper"
             style={{
-              display: "grid",
-              gridTemplateRows: "repeat(2, 1fr)",
-              gridTemplateColumns: "repeat(2, 1fr)",
-              gap: "10px",
-              padding: "5px",
-              border:"1px solid white",
-              backgroundColor: "black",
-
+              display: 'grid',
+              gridTemplateRows: 'repeat(2, 1fr)',
+              gridTemplateColumns: 'repeat(2, 1fr)',
+              gap: '10px',
+              padding: '5px',
+              border: '1px solid white',
+              backgroundColor: 'black',
             }}
           >
             <div className="global-item">
-              <div className="global-title" style={{
-                fontSize:"30px",fontWeight:"500"
-              }}>Market-Cap</div>
+              <div
+                className="global-title"
+                style={{
+                  fontSize: '30px',
+                  fontWeight: '500',
+                }}
+              >
+                Market-Cap
+              </div>
               <div className="value">
-                {globalarray ? `$${formatNumber(globalarray.total_market_cap.btc)}` : "Loading..."}
+                {globalarray ? `$${formatNumber(globalarray.total_market_cap.btc)}` : 'Loading...'}
               </div>
             </div>
 
             <div className="global-item">
               <div className="global-title">Total Volume (24h)</div>
               <div className="value">
-                {globalarray ? `$${formatNumber(globalarray.total_volume.usd)}` : "Loading..."}
+                {globalarray ? `$${formatNumber(globalarray.total_volume.usd)}` : 'Loading...'}
               </div>
             </div>
 
@@ -67,20 +71,19 @@ export function Global() {
               <div className="value">
                 {globalarray
                   ? `${formatNumber(globalarray.market_cap_change_percentage_24h_usd)}%`
-                  : "Loading..."}
+                  : 'Loading...'}
               </div>
-            </div> 
+            </div>
 
             <div className="global-item">
               <div className="global-title">Active Cryptos</div>
               <div className="value">
-                {globalarray ? formatNumber(globalarray.active_cryptocurrencies) : "Loading..."}
+                {globalarray ? formatNumber(globalarray.active_cryptocurrencies) : 'Loading...'}
               </div>
             </div>
           </div>
 
-            <Marketpie info={globalarray}/>
-         
+          <Marketpie info={globalarray} />
         </div>
       </div>
     </>

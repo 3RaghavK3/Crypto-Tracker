@@ -1,7 +1,7 @@
 import React from 'react';
 import logo from '../assets/logo.svg';
 import sun from '../assets/sun.svg';
-import './Header.css'; 
+import './Header.css';
 
 export function Header() {
   return (

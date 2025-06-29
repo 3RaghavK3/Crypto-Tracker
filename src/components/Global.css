@@ -1,31 +1,28 @@
-.market-cap{
-    border:1px solid white;
+.market-cap {
+  border: 1px solid white;
 }
 
-
-.grid-wrapper{
-    flex:2
+.grid-wrapper {
+  flex: 2;
 }
 
-.market-pie-chart{
-    display: flex;
-    height: 100%;
-    flex-direction: column;
-     flex:1;
-     border: 1px solid red;
+.market-pie-chart {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  flex: 1;
+  border: 1px solid red;
 }
 
-
-.global-title{
-    font-size: 1rem;
-    border:1px solid white;
-    display: flex;
-    flex-direction: column;
-    
+.global-title {
+  font-size: 1rem;
+  border: 1px solid white;
+  display: flex;
+  flex-direction: column;
 }
 
-.global-item{
-    border:1px solid white;
-    border-radius:10px;
-    background-color:#0D1421;
+.global-item {
+  border: 1px solid white;
+  border-radius: 10px;
+  background-color: #0d1421;
 }

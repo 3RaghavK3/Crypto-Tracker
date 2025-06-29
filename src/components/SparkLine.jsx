@@ -1,25 +1,19 @@
-import {
-  Chart as ChartJS,
-  LineElement,
-  CategoryScale,
-  LinearScale,
-  PointElement
-} from 'chart.js';
+import { Chart as ChartJS, LineElement, CategoryScale, LinearScale, PointElement } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement);
 
-export function SparkLine({ prices,color }) {
+export function SparkLine({ prices, color }) {
   const data = {
-    labels: prices.map((prices,index)=>index),
+    labels: prices.map((prices, index) => index),
     datasets: [
       {
         data: prices,
-        borderColor:color,
+        borderColor: color,
         borderWidth: 1.5,
         pointRadius: 0,
         fill: false,
-        tension: 0.3
+        tension: 0.3,
       },
     ],
   };
@@ -37,9 +31,8 @@ export function SparkLine({ prices,color }) {
   };
 
   return (
-    <div style={{ height: "100%", width: "100%" }}>
+    <div style={{ height: '100%', width: '100%' }}>
       <Line data={data} options={options} />
     </div>
   );
 }
-
