@@ -1,13 +1,17 @@
-import { createElement, useEffect, useState ,useContext} from "react";
+import { createElement, useEffect, useState ,useContext, useRef} from "react";
 import "./Homepage.css";
 import star from "../assets/star.svg";
 import { SparkLine } from "./SparkLine";
 import { footercontext } from "../context/footercontext";
+import { param, s } from "framer-motion/client";
 
 
 export function Market() {
   const [marketArray, setmarketarray] = useState(null);
+  const [originalArray,setoriginalarray]=useState(null);
   const { page, setPage, perPage, setPerPage } = useContext(footercontext);
+  const [lastsortedkey,setlastsortedkey]=useState(null);
+  const [sortstate,setsortstate]=useState(2);
   
 
     useEffect(() => {
@@ -16,9 +20,11 @@ export function Market() {
       .then((data) => {
         console.log(data);
         setmarketarray(data);
+        setoriginalarray(data);
       })
       .catch((e) => console.log(e));
   }, [page,perPage]);
+
 
   const formatNumber = (num) => {
     return typeof num=="number" 
@@ -33,6 +39,59 @@ export function Market() {
 };
 
 
+const default_sort=(parameter)=>{
+      setmarketarray(originalArray)
+}
+
+const asc_sort = (parameter) => {
+  if (parameter === "name") {
+    setmarketarray([...marketArray].sort((a, b) => a[parameter].localeCompare(b[parameter])));
+  } else {
+    setmarketarray([...marketArray].sort((a, b) => a[parameter] - b[parameter]));
+  }
+};
+
+
+const desc_sort = (parameter) => {
+  if (parameter === "name") {
+    setmarketarray([...marketArray].sort((a, b) => b[parameter].localeCompare(a[parameter])));
+  } else {
+    setmarketarray([...marketArray].sort((a, b) => b[parameter] - a[parameter]));
+  }
+};
+
+
+
+
+const sortStates = {
+  0: asc_sort,
+  1: desc_sort,
+  2:default_sort
+};
+
+
+const handleSort = (parameter) => {
+  let newSortState;
+
+  if (lastsortedkey !== parameter) {
+    newSortState = 0;
+  } else {
+    newSortState = (sortstate + 1) % 3;
+  }
+
+  setlastsortedkey(parameter);
+  setsortstate(newSortState);
+  sortStates[newSortState](parameter);
+};
+
+
+const getsortsymbol=(parameter)=>{
+  if(lastsortedkey!==parameter) return ""
+  if(sortstate==2) return ""
+  if (sortstate==0) return "⮝"
+  if(sortstate==1) return "⮟"
+
+}
 
   return (
     <>
@@ -53,18 +112,37 @@ export function Market() {
             }}
           >
             <tr>
-              <th></th>
-              <th>#</th>
-              <th>Name</th>
-              <th>Price</th>
-              <th>1h %</th>
-              <th>24h %</th>
-              <th>7d %</th>
-              <th>Market Cap</th>
-              <th>Total Volume</th>
-              <th>Circulating Supply</th>
-              <th style={{textAlign:"right"}}>Last 7 days</th>
-            </tr>
+  <th></th>
+  <th>#</th>
+  <th onClick={() => handleSort("name")}>
+    Name {getsortsymbol("name")}
+  </th>
+  <th onClick={() => handleSort("current_price")}>
+    Price {getsortsymbol("current_price")}
+  </th>
+  <th onClick={() => handleSort("price_change_percentage_1h_in_currency")}>
+    1h % {getsortsymbol("price_change_percentage_1h_in_currency")}
+  </th>
+  <th onClick={() => handleSort("price_change_percentage_24h_in_currency")}>
+    24h % {getsortsymbol("price_change_percentage_24h_in_currency")}
+  </th>
+  <th onClick={() => handleSort("price_change_percentage_7d_in_currency")}>
+    7d % {getsortsymbol("price_change_percentage_7d_in_currency")}
+  </th>
+  <th onClick={() => handleSort("market_cap")}>
+    Market Cap {getsortsymbol("market_cap")}
+  </th>
+  <th onClick={() => handleSort("total_volume")}>
+    Total Volume {getsortsymbol("total_volume")}
+  </th>
+  <th onClick={() => handleSort("circulating_supply")}>
+    Circulating Supply {getsortsymbol("circulating_supply")}
+  </th>
+  <th style={{ textAlign: "right" }}>
+    Last 7 days
+  </th>
+</tr>
+
           </thead>
 
             <tbody>

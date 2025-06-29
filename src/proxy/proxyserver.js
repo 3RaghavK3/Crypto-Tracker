@@ -13,6 +13,8 @@ const links = {
   global: "https://api.coingecko.com/api/v3/global",
 };
 
+
+
 app.get("/market", async (req, res) => {
   const page = req.query.page;
   const perPage = req.query.perPage;

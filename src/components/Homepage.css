@@ -40,6 +40,7 @@ th{
     border-top: 1px solid rgba(128, 128, 128, 0.42);
     height: 50px;
     text-align: center;
+    cursor: pointer;
 }
 tr{
     font-weight: 700;
