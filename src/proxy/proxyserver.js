@@ -28,6 +28,18 @@ app.get('/market', async (req, res) => {
   }
 });
 
+app.get('/coindetail/:id',async(req,res)=>{
+      const id=req.params.id;
+      try{
+          const data=await fetchData(`https://api.coingecko.com/api/v3/coins/${id}`)
+          res.json(data);
+      }
+      catch(err){
+        console.error("Backend Error: ",err.message);
+        res.status(500).json({error:"Failed to fetch data"})
+      }
+})
+
 app.get('/get/:id', async (req, res) => {
   const path = req.params.id;
   try {

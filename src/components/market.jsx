@@ -4,6 +4,8 @@ import star from '../assets/star.svg';
 import { SparkLine } from './SparkLine';
 import { footercontext } from '../context/footercontext';
 import { param, s } from 'framer-motion/client';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export function Market() {
   const [marketArray, setmarketarray] = useState(null);
@@ -11,6 +13,9 @@ export function Market() {
   const { page, setPage, perPage, setPerPage } = useContext(footercontext);
   const [lastsortedkey, setlastsortedkey] = useState(null);
   const [sortstate, setsortstate] = useState(2);
+
+
+  const navigate=useNavigate();
 
   useEffect(() => {
     fetch(`http://localhost:3000/market?page=${page}&perPage=${perPage}`)
@@ -132,7 +137,7 @@ export function Market() {
           <tbody>
             {marketArray?.map((coin) => {
               return (
-                <tr key={coin.id}>
+                <tr key={coin.id} onClick={() => navigate(`/coindetail/${coin.id}`)}>
                   <td>
                     <div
                       style={{

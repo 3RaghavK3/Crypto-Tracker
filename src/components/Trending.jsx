@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
 import './Trending.css';
+import { useNavigate} from 'react-router-dom';
 
 export function Trending() {
   const [trendingArray, settrendingarray] = useState(null);
-
+  const navigate=useNavigate();
+  
+  
   useEffect(() => {
     fetch('http://localhost:3000/get/trending')
       .then((res) => res.json())
@@ -32,7 +35,6 @@ export function Trending() {
             height: '100%',
             width: '100%',
             color: 'white',
-            border: '1px solid red',
             padding: 0,
             margin: 0,
             textAlign: 'left',
@@ -50,17 +52,37 @@ export function Trending() {
             </tr>
           </thead>
 
-          <tbody className="inter-text">
+          <tbody style={{
+            
+          }}>
             {trendingArray?.map((coin) => {
               return (
-                <tr key={coin.item.id}>
+                <tr key={coin.item.id} onClick={() => navigate(`/coindetail/${coin.item.id}`)}>
                   <td>{coin.item.market_cap_rank}</td>
-                  <td
-                    style={{
-                      fontSize: '1.25rem',
-                    }}
-                  >
-                    {coin.item.name} ({coin.item.symbol})
+                  <td>
+                    <div
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        gap: '6px',
+                      }}
+                    >
+                      <img src={coin.item.thumb} className="symbol-coin" />
+                      <div
+                        style={{
+                          height: '100%',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        <span style={{ fontWeight: 600 }}>{coin.item.name}</span>&nbsp;
+                        <span style={{ fontWeight: 400, color: 'rgb(163, 158, 158)' }}>
+                          ({coin.item.symbol?.toUpperCase()})
+                        </span>
+                      </div>
+                    </div>
                   </td>
 
                   <td>${formatNumber(coin.item.data.price)}</td>

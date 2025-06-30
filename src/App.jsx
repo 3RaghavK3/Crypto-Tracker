@@ -4,7 +4,8 @@ import viteLogo from '/vite.svg';
 import { MainLayout } from './layout/MainLayout';
 import { Homepage } from './components/Homepage';
 import { FooterProvider } from './context/footercontext';
-
+import { Routes,Route } from 'react-router-dom';
+import { CoinDetail } from './components/Coindetail';
 function App() {
   const [count, setCount] = useState(0);
 
@@ -12,7 +13,10 @@ function App() {
     <>
       <FooterProvider>
         <MainLayout>
-          <Homepage />
+          <Routes>
+            <Route path="/" element={<Homepage/>}/>
+            <Route path="/coindetail/:id" element={<CoinDetail/>}/>
+            </Routes>
         </MainLayout>
       </FooterProvider>
     </>
