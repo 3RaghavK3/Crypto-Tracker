@@ -2,7 +2,7 @@ import { Global } from './Global';
 import './Homepage.css';
 import { Market } from './market';
 import { Trending } from './Trending';
-
+import { Note } from './note';
 export function Homepage() {
   return (
     <>
@@ -10,7 +10,7 @@ export function Homepage() {
         <Trending />
         <Global />
       </div>
-
+      <Note/>
       <Market />
     </>
   );
