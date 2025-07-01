@@ -3,8 +3,9 @@ import './Homepage.css';
 import star from '../assets/star.svg';
 import { footercontext } from '../context/footercontext';
 import { param, s } from 'framer-motion/client';
-import { Link } from 'react-router-dom';
+import { Link, useFetcher } from 'react-router-dom';
 import { CoinCard } from './CoinCard';
+import { WishlistContext } from '../context/wishlistcontext';
 
 export function Market() {
   const [marketArray, setmarketarray] = useState(null);
@@ -12,7 +13,10 @@ export function Market() {
   const { page, setPage, perPage, setPerPage } = useContext(footercontext);
   const [lastsortedkey, setlastsortedkey] = useState(null);
   const [sortstate, setsortstate] = useState(2);
+  const {LikedCoins,setLikedCoins}=useContext(WishlistContext);
 
+
+  useEffect(()=>console.log(LikedCoins),[LikedCoins])
 
   useEffect(() => {
     fetch(`http://localhost:3000/market?page=${page}&perPage=${perPage}`)

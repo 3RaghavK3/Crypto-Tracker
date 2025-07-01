@@ -1,6 +1,8 @@
 import star from '../assets/star.svg';
 import { useNavigate } from 'react-router-dom';
 import { SparkLine } from './SparkLine';
+import { useContext } from "react";
+import { WishlistContext } from "../context/wishlistcontext";
 
 export function CoinCard({
   id,
@@ -18,24 +20,40 @@ export function CoinCard({
   sparkline,
 }) {
 
-    console.log('🪙 CoinCard Props Debug:');
-console.log('id:', id);
-console.log('rank:', rank);
-console.log('image:', image);
-console.log('name:', name);
-console.log('symbol:', symbol);
-console.log('price:', price);
-console.log('change1hr:', change1hr);
-console.log('change24hr:', change24hr);
-console.log('change7d:', change7d);
-console.log('marketcap:', marketcap);
-console.log('volume:', volume);
-console.log('circulating_supply:', circulatingsupply);
-console.log('sparkline:', sparkline);
+
+  const coinData={
+  id,
+  rank,
+  image,
+  name,
+  symbol,
+  price,
+  change7d,
+  change1hr,
+  change24hr,
+  marketcap,
+  volume,
+  circulatingsupply,
+  sparkline,
+  }
 
   const navigate = useNavigate();
 
-  const formatNumber = (num) => {
+  const {LikedCoins,setLikedCoins}=useContext(WishlistContext);
+
+
+  const isLiked=LikedCoins.some((coin) => coin.id === id);
+
+  const toggleStar=()=>{
+     if(isLiked){
+          setLikedCoins(LikedCoins.filter((coin)=>coin.id!==id));
+     }
+     else{
+          setLikedCoins([...LikedCoins,coinData])
+     }
+  }
+
+   const formatNumber = (num) => {
     return typeof num === 'number'
       ? num.toLocaleString(undefined, {
           minimumFractionDigits: 2,
@@ -44,6 +62,7 @@ console.log('sparkline:', sparkline);
       : '--';
   };
 
+
   const checkTrend = (percentage) => {
     if (typeof percentage !== 'number') return ['gray', ''];
     return percentage > 0 ? ['#17D082', '⮝'] : ['#F43D46', '⮟'];
@@ -51,9 +70,29 @@ console.log('sparkline:', sparkline);
 
   return (
     <tr onClick={() => navigate(`/coindetail/${id}`)}>
-      <td>
+      <td onClick={(e)=>{
+          e.stopPropagation();
+          toggleStar();
+      }}>
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '10px' }}>
-          <img style={{ height: '15px' }} src={star} alt="star" />
+        <svg
+          height="24"
+          width="24"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <polygon
+            fill={isLiked ? "yellow" : "none"}
+            stroke="white"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            points="12 2 15.09 8.26 22 9.27 
+                    17 14.14 18.18 21.02 
+                    12 17.77 5.82 21.02 
+                    7 14.14 2 9.27 8.91 8.26 12 2"
+          />
+        </svg>
         </div>
       </td>
 
