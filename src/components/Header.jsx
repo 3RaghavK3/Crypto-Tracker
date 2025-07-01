@@ -15,6 +15,7 @@ export function Header() {
       <div className="nav">
           <span>Market</span>
           <span>Compare</span>
+          <span>Wishlist</span>
           <div className="theme-icon">
             <img src={sun} alt="Sun" />
           </div>

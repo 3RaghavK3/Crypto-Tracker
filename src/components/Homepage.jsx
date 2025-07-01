@@ -7,7 +7,7 @@ export function Homepage() {
   return (
     <>
       <div className="grid-container">
-        <Trending />
+        {/* <Trending /> */}
         <Global />
       </div>
       <Note/>

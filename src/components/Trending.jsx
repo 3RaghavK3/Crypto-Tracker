@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import './Trending.css';
-import { useNavigate} from 'react-router-dom';
+import { CoinCard } from './CoinCard';
 
-export function Trending() {
+export function Trending({
+rank ,id,image,symbol,name,price
+}) {
   const [trendingArray, settrendingarray] = useState(null);
-  const navigate=useNavigate();
-  
+
   
   useEffect(() => {
     fetch('http://localhost:3000/get/trending')
@@ -17,9 +18,6 @@ export function Trending() {
       .catch((e) => console.log(e));
   }, []);
 
-  const formatNumber = (num) => {
-    return Number.isInteger(num) ? num : num.toFixed(2);
-  };
 
   return (
     <>
@@ -46,6 +44,7 @@ export function Trending() {
             }}
           >
             <tr>
+              <th></th>
               <th>#</th>
               <th>Name</th>
               <th>Current Price</th>
@@ -57,38 +56,17 @@ export function Trending() {
           }}>
             {trendingArray?.map((coin) => {
               return (
-                <tr key={coin.item.id} onClick={() => navigate(`/coindetail/${coin.item.id}`)}>
-                  <td>{coin.item.market_cap_rank}</td>
-                  <td>
-                    <div
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        gap: '6px',
-                      }}
-                    >
-                      <img src={coin.item.thumb} className="symbol-coin" />
-                      <div
-                        style={{
-                          height: '100%',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}
-                      >
-                        <span style={{ fontWeight: 600 }}>{coin.item.name}</span>&nbsp;
-                        <span style={{ fontWeight: 400, color: 'rgb(163, 158, 158)' }}>
-                          ({coin.item.symbol?.toUpperCase()})
-                        </span>
-                      </div>
-                    </div>
-                  </td>
+               
+                 <CoinCard rank={coin.item.market_cap_rank}
+                  key={coin.item.id}
+                  id={coin.item.id}
+                  image={coin.item.thumb}
+                  name={coin.item.name}
+                  symbol={coin.item.symbol}
+                  price={coin.item.data.price}/>
 
-                  <td>${formatNumber(coin.item.data.price)}</td>
-                </tr>
-              );
-            })}
+               
+            )})}
           </tbody>
         </table>
       </div>

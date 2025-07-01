@@ -2,7 +2,7 @@ import './Global.css';
 import { useState, useEffect } from 'react';
 import { Market } from './market';
 import { Marketpie } from './Marketpie';
-
+import { Trending } from './Trending';
 export function Global() {
   const [globalarray, settglobalarray] = useState(null);
 
@@ -22,6 +22,8 @@ export function Global() {
 
   return (
     <>
+     <Trending />
+     
       <div className="widget inter-text" style={{ flex: 2, color: 'white' }}>
         {/* <span className="title-name">Global</span> */}
 
@@ -83,7 +85,7 @@ export function Global() {
             </div>
           </div>
 
-          <Marketpie info={globalarray} />
+        
         </div>
       </div>
     </>

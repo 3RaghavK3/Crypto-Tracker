@@ -1,11 +1,10 @@
 import { createElement, useEffect, useState, useContext, useRef } from 'react';
 import './Homepage.css';
 import star from '../assets/star.svg';
-import { SparkLine } from './SparkLine';
 import { footercontext } from '../context/footercontext';
 import { param, s } from 'framer-motion/client';
 import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { CoinCard } from './CoinCard';
 
 export function Market() {
   const [marketArray, setmarketarray] = useState(null);
@@ -14,8 +13,6 @@ export function Market() {
   const [lastsortedkey, setlastsortedkey] = useState(null);
   const [sortstate, setsortstate] = useState(2);
 
-
-  const navigate=useNavigate();
 
   useEffect(() => {
     fetch(`http://localhost:3000/market?page=${page}&perPage=${perPage}`)
@@ -28,16 +25,6 @@ export function Market() {
       .catch((e) => console.log(e));
   }, [page, perPage]);
 
-  const formatNumber = (num) => {
-    return typeof num == 'number'
-      ? num.toLocaleString({ minimumFractionDigits: 2, maximumFractionDigits: 2 })
-      : 'Loading';
-  };
-
-  const checkTrend = (percentage) => {
-    if (percentage > 0) return ['#17D082', '⮝'];
-    else return ['#F43D46', '⮟'];
-  };
 
   const default_sort = (parameter) => {
     setmarketarray(originalArray);
@@ -136,83 +123,23 @@ export function Market() {
 
           <tbody>
             {marketArray?.map((coin) => {
-              return (
-                <tr key={coin.id} onClick={() => navigate(`/coindetail/${coin.id}`)}>
-                  <td>
-                    <div
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        padding: '10px',
-                      }}
-                    >
-                      <img style={{ height: '15px' }} src={star} />
-                    </div>
-                  </td>
-                  <td>{coin.market_cap_rank}</td>
-                  <td>
-                    <div
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        gap: '6px',
-                      }}
-                    >
-                      <img src={coin.image} className="symbol-coin" />
-                      <div
-                        style={{
-                          height: '100%',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}
-                      >
-                        <span style={{ fontWeight: 600 }}>{coin.name}</span>&nbsp;
-                        <span style={{ fontWeight: 400, color: 'rgb(163, 158, 158)' }}>
-                          ({coin.symbol.toUpperCase()})
-                        </span>
-                      </div>
-                    </div>
-                  </td>
-                  <td>${formatNumber(coin.current_price)}</td>
-                  {console.log(coin.price_change_percentage_7d_in_currency)}
-                  <td
-                    style={{
-                      color: checkTrend(coin.price_change_percentage_1h_in_currency)[0],
-                    }}
-                  >
-                    {`${formatNumber(coin.price_change_percentage_1h_in_currency)}%
- ${checkTrend(coin.price_change_percentage_1h_in_currency)[1]} `}
-                  </td>
-                  <td
-                    style={{
-                      color: checkTrend(coin.price_change_percentage_24h_in_currency)[0],
-                    }}
-                  >
-                    {`${formatNumber(coin.price_change_percentage_24h_in_currency)}%
-  ${checkTrend(coin.price_change_percentage_24h_in_currency)[1]} `}
-                  </td>
-                  <td
-                    style={{
-                      color: checkTrend(coin.price_change_percentage_7d_in_currency)[0],
-                    }}
-                  >
-                    {`${formatNumber(coin.price_change_percentage_7d_in_currency)}%
-  ${checkTrend(coin.price_change_percentage_7d_in_currency)[1]} `}
-                  </td>
-                  <td>{`$${formatNumber(coin.market_cap)}`}</td>
-                  <td>{`$${formatNumber(coin.total_volume)}`}</td>
-                  <td>{`${formatNumber(coin.circulating_supply)} ${coin.symbol.toUpperCase()}`}</td>
-
-                  <td>
-                    <SparkLine
-                      color={checkTrend(coin.price_change_percentage_7d_in_currency)}
-                      prices={coin.sparkline_in_7d.price}
-                    />
-                  </td>
-                </tr>
+              return ( 
+                  <CoinCard 
+                  key={coin.id}
+                  id={coin.id}
+                  rank={coin.market_cap_rank} 
+                  image={coin.image}
+                  name={coin.name}
+                  symbol={coin.symbol}
+                  price={coin.current_price}
+                  change7d={coin.price_change_percentage_7d_in_currency}
+                  change1hr={coin.price_change_percentage_1h_in_currency}
+                  change24hr={coin.price_change_percentage_24h_in_currency}
+                  marketcap={coin.market_cap}
+                  volume={coin.total_volume}
+                  circulatingsupply={coin.circulating_supply}
+                  sparkline={coin.sparkline_in_7d.price}
+                  />
               );
             })}
           </tbody>
