@@ -6,7 +6,8 @@ export function Global() {
   const [globalarray, settglobalarray] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:3000/get/global')
+    // @ts-ignore
+    fetch(`/api/global`)
       .then((res) => res.json())
       .then((json) => {
         console.log(json.data);

@@ -6,7 +6,8 @@ export function CoinDetail() {
   const [CoinDetailArray, setCoinDetailArray] = useState(null);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/coindetail/${id}`)
+    // @ts-ignore
+    fetch(`/api/coindetail/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setCoinDetailArray(data);
