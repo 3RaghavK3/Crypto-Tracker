@@ -7,6 +7,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(cors());
+app.use(express.json());
 
 app.get('/market', async (req, res) => {
   const page = req.query.page;
@@ -22,6 +23,17 @@ app.get('/market', async (req, res) => {
     res.status(500).json({ error: 'failed to fetch data' });
   }
 });
+
+app.get('/pingcg', async (req, res) => {
+  try {
+    const r = await fetch('https://api.coingecko.com/api/v3/ping');
+    const txt = await r.text();
+    res.send(txt); // 
+  } catch (err) {
+    res.send('Error: ' + err.message);
+  }
+});
+
 
 app.get('/coindetail/:id', async (req, res) => {
   const id = req.params.id;
