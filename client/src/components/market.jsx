@@ -18,7 +18,7 @@ export function Market() {
 
   useEffect(() => {
     // @ts-ignore
-    fetch(`${import.meta.process.env.VITE_API_URL}?page=${page}&perPage=${perPage}`)
+    fetch(`${import.meta.env.VITE_API_URL}?page=${page}&perPage=${perPage}`)
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
