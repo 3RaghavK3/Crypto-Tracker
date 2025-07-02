@@ -22,8 +22,7 @@ export function Global() {
 
   return (
     <>
-     <Trending />
-     
+
       <div className="widget inter-text" style={{ flex: 2, color: 'white' }}>
         {/* <span className="title-name">Global</span> */}
 

@@ -15,8 +15,13 @@ export function Header() {
       </div>
 
       <div className="nav">
-          <span>Market</span>
+          <span onClick={()=>{
+            navigate("/")
+          }}>Market</span>
           <span>Compare</span>
+          <span onClick={()=>{
+            navigate("/trending")
+          }}>Trending</span>
           <span onClick={()=>{
             navigate("/wishlist")
           }}>Wishlist</span>

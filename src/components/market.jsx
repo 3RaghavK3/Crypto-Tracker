@@ -6,6 +6,8 @@ import { param, s } from 'framer-motion/client';
 import { Link, useFetcher } from 'react-router-dom';
 import { CoinCard } from './CoinCard';
 import { WishlistContext } from '../context/wishlistcontext';
+import { Footer } from './Footer';
+import { Note } from './note';
 
 export function Market() {
   const [marketArray, setmarketarray] = useState(null);
@@ -15,8 +17,6 @@ export function Market() {
   const [sortstate, setsortstate] = useState(2);
   const {LikedCoins,setLikedCoins}=useContext(WishlistContext);
 
-
-  useEffect(()=>console.log(LikedCoins),[LikedCoins])
 
   useEffect(() => {
     fetch(`http://localhost:3000/market?page=${page}&perPage=${perPage}`)
@@ -79,8 +79,11 @@ export function Market() {
 
   return (
     <>
-      <div className="widget">
-        <table
+      <div >
+        {marketArray && marketArray.length>0 ?
+        <div className="widget">
+          <Note/>
+           <table
           className="inter-text"
           style={{
             height: '100%',
@@ -148,6 +151,22 @@ export function Market() {
             })}
           </tbody>
         </table>
+        <Footer/>
+        </div>
+        :
+          <div style={{
+            display:"flex",
+            flex:"1",
+            alignItems:"center",
+            justifyContent:"center",
+            fontSize:"5rem",
+            color:"white"
+          }}>
+
+            Loading..
+          </div>
+        }
+        
       </div>
     </>
   );

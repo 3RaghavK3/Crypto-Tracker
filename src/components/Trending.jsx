@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import './Trending.css';
 import { CoinCard } from './CoinCard';
+import { Header } from './Header';
 
 export function Trending({
 rank ,id,image,symbol,name,price
@@ -21,7 +22,9 @@ rank ,id,image,symbol,name,price
 
   return (
     <>
-      <div
+    <Header/>
+    {trendingArray && trendingArray.length>0
+    ?<div
         className="widget"
         style={{
           overflowY: 'scroll',
@@ -54,7 +57,7 @@ rank ,id,image,symbol,name,price
           <tbody style={{
             
           }}>
-            {trendingArray?.map((coin) => {
+            {trendingArray.map((coin) => {
               return (
                
                  <CoinCard rank={coin.item.market_cap_rank}
@@ -65,11 +68,24 @@ rank ,id,image,symbol,name,price
                   symbol={coin.item.symbol}
                   price={coin.item.data.price}/>
 
-               
             )})}
           </tbody>
         </table>
       </div>
+      :<div style={{
+            display:"flex",
+            flex:"1",
+            alignItems:"center",
+            justifyContent:"center",
+            minHeight:"100vh",
+            fontSize:"4rem",
+            color:"white"
+          }}>
+
+            Loading..
+          </div>
+      } 
+      
     </>
   );
 }

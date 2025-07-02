@@ -38,9 +38,8 @@ export function CoinCard({
   }
 
   const navigate = useNavigate();
-
+  
   const {LikedCoins,setLikedCoins}=useContext(WishlistContext);
-
 
   const isLiked=LikedCoins.some((coin) => coin.id === id);
 
@@ -49,7 +48,7 @@ export function CoinCard({
           setLikedCoins(LikedCoins.filter((coin)=>coin.id!==id));
      }
      else{
-          setLikedCoins([...LikedCoins,coinData])
+          setLikedCoins([coinData,...LikedCoins])
      }
   }
 
