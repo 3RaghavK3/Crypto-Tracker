@@ -1,5 +1,6 @@
 import { createElement, useEffect, useState, useContext, useRef } from 'react';
 import './Homepage.css';
+
 import { footercontext } from '../context/footercontext';
 import { param, s } from 'framer-motion/client';
 import { Link, useFetcher } from 'react-router-dom';
