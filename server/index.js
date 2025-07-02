@@ -40,19 +40,13 @@ const links = {
 
 app.get('/get/:id', async (req, res) => {
   const path = req.params.id;
-  console.log('Requested path:', path);
-  console.log('Resolved URL:', links[path]);
-
-  if (!links[path]) {
-    return res.status(400).json({ error: 'Invalid endpoint key: ' + path });
-  }
-
   try {
+      console.log(" Fetching from URL:", links[path]); 
     const data = await fetchData(links[path]);
-    res.json(data);
+    res.text(data);
   } catch (err) {
     console.error('Backend Error:', err.message);
-    res.status(500).json({ error: 'Failed to fetch data' });
+    res.status(500).json({ error: 'failed to fetch data' });
   }
 });
 

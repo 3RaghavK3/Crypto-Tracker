@@ -4,7 +4,9 @@ export default async function fetchData(url) {
   const options = {
     method: 'GET',
     headers: {
-      accept: 'application/json',
+      'Accept': 'application/json',
+      'User-Agent': 'Mozilla/5.0',
+    
     },
   };
 
