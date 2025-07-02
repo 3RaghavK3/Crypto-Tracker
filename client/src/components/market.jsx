@@ -17,7 +17,8 @@ export function Market() {
   const { LikedCoins, setLikedCoins } = useContext(WishlistContext);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/market?page=${page}&perPage=${perPage}`)
+    // @ts-ignore
+    fetch(`${import.meta.process.env.VITE_API_URL}?page=${page}&perPage=${perPage}`)
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
