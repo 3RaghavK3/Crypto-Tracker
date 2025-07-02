@@ -39,11 +39,13 @@ th {
 }
 tr {
   font-weight: 700;
+
 }
 
 tbody tr:hover {
   cursor: pointer;
-  border: 1px solid white;
+  background-color: black;
+  box-shadow: 0px 0px 0px 1px white;
 }
 .symbol-coin {
   height: 30px;

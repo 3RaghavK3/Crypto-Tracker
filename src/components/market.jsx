@@ -82,7 +82,7 @@ export function Market() {
       <div >
         {marketArray && marketArray.length>0 ?
         <div className="widget">
-          <Note/>
+          {/* <Note/> */}
            <table
           className="inter-text"
           style={{

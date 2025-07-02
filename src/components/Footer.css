@@ -26,9 +26,7 @@
   cursor: pointer;
 }
 
-.display-count {
-  background-color: black;
-  border: 1px solid rgba(128, 128, 128, 0.42);
+.display-count {  
   height: 50%;
 }
 

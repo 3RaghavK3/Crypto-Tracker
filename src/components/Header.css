@@ -5,14 +5,13 @@
   width: 100%;
   background-color: #0D1421;
   color: white;
-  border: 1px solid black;
-  
+  padding-top: 10px;
+  padding-bottom: 10px;
   
 }
 
-
 span{
-  font-family: 'Inter', sans-serif;
+  font-family: 'Matangi', sans-serif;
   font-optical-sizing: auto;
   cursor: pointer;
 
@@ -31,8 +30,8 @@ span{
 
 .title {
   font-size: 24px;
-  font-weight: 400;
-  font-family: 'Paytone One', sans-serif;
+  font-weight: 1000;
+  font-family: 'Matangi', sans-serif;
 }
 
 

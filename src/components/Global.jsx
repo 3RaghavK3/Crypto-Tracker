@@ -23,7 +23,7 @@ export function Global() {
   return (
     <>
 
-      <div className="widget inter-text" style={{ flex: 2, color: 'white' }}>
+      <div className="widget" style={{ flex: 2, color: 'white' }}>
         {/* <span className="title-name">Global</span> */}
 
         <div
@@ -41,17 +41,12 @@ export function Global() {
               gridTemplateColumns: 'repeat(2, 1fr)',
               gap: '10px',
               padding: '5px',
-              border: '1px solid white',
               backgroundColor: 'black',
             }}
           >
             <div className="global-item">
               <div
                 className="global-title"
-                style={{
-                  fontSize: '30px',
-                  fontWeight: '500',
-                }}
               >
                 Market-Cap
               </div>
@@ -71,8 +66,22 @@ export function Global() {
               <div className="global-title">24h Market Cap Change (%)</div>
               <div className="value">
                 {globalarray
-                  ? `${formatNumber(globalarray.market_cap_change_percentage_24h_usd)}%`
+                  ? 
+
+                  <>
+                  <span className="value">
+                    {"$"+formatNumber(globalarray.market_cap_change_percentage_24h_usd)+"%"} 
+                  </span>
+
+                   {globalarray.market_cap_change_percentage_24h_usd > 0 
+                    ?
+                    <span className="value" style={{color:"#17D082"}}>⮝</span> 
+                    :
+                    <span  className="value" style={{color:"#F43D46"}}>⮟</span>
+                   }
+                   </>
                   : 'Loading...'}
+                 
               </div>
             </div>
 
