@@ -40,17 +40,18 @@ const links = {
 
 app.get('/get/:id', async (req, res) => {
   const path = req.params.id;
-  console.log('Requested path:', path);
-    try {
-      console.log(" Fetching from URL:", links[path]); 
+  try {
+      console.log("🔍 Fetching from URL:", links[path]); 
     const data = await fetchData(links[path]);
     res.json(data);
   } catch (err) {
     console.error('Backend Error:', err.message);
     res.status(500).json({ error: 'failed to fetch data' });
   }
-});
-req.params.coin;
+})
+
+app.get('/coinchart/:coin', async (req, res) => {
+  const coin = req.params.coin;
   try {
     const data = await fetchData(
       `https://api.coingecko.com/api/v3/coins/${coin}/market_chart?vs_currency=usd&days=7`
@@ -58,7 +59,7 @@ req.params.coin;
     res.json(data);
   } catch (err) {
     console.error('Chart Fetch Error:', coin, err.message);
-    res.status(500).json({ error: 'chart fetch failed' });
+    res.status(500).json({ error: 'Chart fetch failed' });
   }
 });
 
