@@ -8,6 +8,7 @@ export default async function fetchData(url) {
     },
   };
 
+  
   if (!url) {
     console.error('Invalid path:', path);
     return res.status(400).json({ error: 'Invalid API endpoint requested.' });
@@ -16,3 +17,5 @@ export default async function fetchData(url) {
     .then((res) => res.json())
     .catch((err) => console.error(err));
 }
+
+

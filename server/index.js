@@ -41,6 +41,7 @@ const links = {
 app.get('/get/:id', async (req, res) => {
   const path = req.params.id;
   try {
+      console.log(" Fetching from URL:", links[path]); 
     const data = await fetchData(links[path]);
     res.json(data);
   } catch (err) {
@@ -48,6 +49,8 @@ app.get('/get/:id', async (req, res) => {
     res.status(500).json({ error: 'failed to fetch data' });
   }
 });
+
+app.get('/ping', (req, res) => res.json({ message: "pong" }));
 
 app.get('/coinchart/:coin', async (req, res) => {
   const coin = req.params.coin;
