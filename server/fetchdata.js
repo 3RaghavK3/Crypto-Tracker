@@ -1,4 +1,7 @@
 import fetch from "node-fetch";
+import dotenv from 'dotenv';
+dotenv.config();
+
 
 export default async function fetchData(url) {
   const options = {
@@ -6,6 +9,7 @@ export default async function fetchData(url) {
     headers: {
       'Accept': 'application/json',
       'User-Agent': 'Mozilla/5.0',
+      'x-cg-demo-api-key': process.env.COINGECKO_API_KEY,
     
     },
   };

@@ -28,7 +28,7 @@ app.get('/pingcg', async (req, res) => {
   try {
     const r = await fetch('https://api.coingecko.com/api/v3/ping');
     const txt = await r.text();
-    res.send(txt); // 
+    res.send(txt); 
   } catch (err) {
     res.send('Error: ' + err.message);
   }
