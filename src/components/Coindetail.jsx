@@ -7,7 +7,7 @@ export function CoinDetail() {
 
   useEffect(() => {
     // @ts-ignore
-    fetch(`/api/coindetail/${id}`)
+    fetch(`/api/coindetail?id=${id}`)
       .then((res) => res.json())
       .then((data) => {
         setCoinDetailArray(data);
