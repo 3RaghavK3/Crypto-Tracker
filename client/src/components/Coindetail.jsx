@@ -6,15 +6,14 @@ export function CoinDetail() {
   const [CoinDetailArray, setCoinDetailArray] = useState(null);
 
   useEffect(() => {
-  // @ts-ignore
-  fetch(`http://localhost:3000/api/coindetail?id=${id}`)
-    .then((res) => res.json())
-    .then((data) => {
-      setCoinDetailArray(data);
-    })
-    .catch((e) => console.error(e + 'Error in fetching coindetail'));
-}, [id]);
-
+    // @ts-ignore
+    fetch(`http://localhost:3000/api/coindetail?id=${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setCoinDetailArray(data);
+      })
+      .catch((e) => console.error(e + 'Error in fetching coindetail'));
+  }, [id]);
 
   return (
     <>

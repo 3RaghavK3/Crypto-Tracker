@@ -6,15 +6,15 @@ export function Global() {
   const [globalarray, settglobalarray] = useState(null);
 
   useEffect(() => {
-  // @ts-ignore
-  fetch(`http://localhost:3000/api/global`)
-    .then((res) => res.json())
-    .then((json) => {
-      console.log(json.data);
-      settglobalarray(json.data);
-    })
-    .catch((e) => console.log(e));
-}, []);
+    // @ts-ignore
+    fetch(`http://localhost:3000/api/global`)
+      .then((res) => res.json())
+      .then((json) => {
+        console.log(json.data);
+        settglobalarray(json.data);
+      })
+      .catch((e) => console.log(e));
+  }, []);
 
   const formatNumber = (num) => {
     return parseFloat(num).toLocaleString(undefined, {

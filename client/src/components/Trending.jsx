@@ -8,7 +8,7 @@ export function Trending() {
 
   useEffect(() => {
     // @ts-ignore
-    fetch(`/api/trending`)
+    fetch(`http://localhost:3000/api/trending`)
       .then((res) => res.json())
       .then((data) => {
         console.log(data['coins']);
