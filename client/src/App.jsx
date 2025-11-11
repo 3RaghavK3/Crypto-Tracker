@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Homepage } from './components/Homepage';
-import { FooterProvider } from './context/footercontext';
 import { Routes, Route } from 'react-router-dom';
 import { CoinDetail } from './components/Coindetail';
 import { WishlistProvider } from './context/wishlistcontext';
@@ -12,7 +11,7 @@ function App() {
 
   return (
     <>
-      <FooterProvider>
+     
         <WishlistProvider>
           <Routes>
             <Route path="/" element={<Homepage />} />
@@ -22,7 +21,7 @@ function App() {
             <Route path="/wishlist" element={<Wishlist />} />
           </Routes>
         </WishlistProvider>
-      </FooterProvider>
+     
     </>
   );
 }

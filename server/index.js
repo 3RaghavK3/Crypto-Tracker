@@ -26,10 +26,10 @@ app.get('/api/global', async (req, res) => {
 
 
 app.get('/api/market', async (req, res) => {
-  const { page, perPage } = req.query;
+  const { page } = req.query;
   try {
     const response = await fetch(
-      `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=${perPage}&page=${page}&sparkline=true&price_change_percentage=1h%2C24h%2C7d&precision=2`
+      `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=100&page=${page}&sparkline=true&price_change_percentage=1h%2C24h%2C7d&precision=2`
     );
     const data = await response.json();
     res.status(200).json(data);
