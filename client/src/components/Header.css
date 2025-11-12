@@ -10,7 +10,6 @@
 }
 
 span {
-  font-family: 'Matangi', sans-serif;
   font-optical-sizing: auto;
   cursor: pointer;
 }
@@ -29,7 +28,6 @@ span {
 .title {
   font-size: 24px;
   font-weight: 1000;
-  font-family: 'Matangi', sans-serif;
 }
 
 .nav {

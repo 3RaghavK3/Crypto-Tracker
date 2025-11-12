@@ -10,7 +10,8 @@ export function Header() {
     <header className="header">
       <div className="header-left">
         <img src={logo} className="logo" alt="Logo" />
-        <span className="title">CRYPTO.</span>
+        <span className="title" onClick={() => {
+            navigate('/');}}>CRYPTO.</span>
       </div>
 
       <div className="nav">
@@ -21,7 +22,6 @@ export function Header() {
         >
           Market
         </span>
-        <span>Compare</span>
         <span
           onClick={() => {
             navigate('/trending');
@@ -36,9 +36,7 @@ export function Header() {
         >
           Wishlist
         </span>
-        <div className="theme-icon">
-          <img src={sun} alt="Sun" />
-        </div>
+        
       </div>
     </header>
   );

@@ -61,7 +61,15 @@ export function Trending() {
                     image={coin.item.thumb}
                     name={coin.item.name}
                     symbol={coin.item.symbol}
-                    price={coin.item.data.price} change7d={undefined} change1hr={undefined} change24hr={undefined} marketcap={undefined} volume={undefined} circulatingsupply={undefined} sparkline={undefined} />
+                    price={coin.item.data.price}
+                    change7d={undefined}
+                    change1hr={undefined}
+                    change24hr={undefined}
+                    marketcap={undefined}
+                    volume={undefined}
+                    circulatingsupply={undefined}
+                    sparkline={undefined}
+                  />
                 );
               })}
             </tbody>

@@ -4,14 +4,12 @@ import { createContext, use, useEffect, useState } from 'react';
 export const WishlistContext = createContext();
 
 export const WishlistProvider = ({ children }) => {
-
-  const [LikedCoins, setLikedCoins] = useState(()=>{
-     const stored=(localStorage.getItem('Wishlist')) 
-     if(stored) return JSON.parse(stored)
-     else return []
-  }
-  );
-   useEffect(() => {
+  const [LikedCoins, setLikedCoins] = useState(() => {
+    const stored = localStorage.getItem('Wishlist');
+    if (stored) return JSON.parse(stored);
+    else return [];
+  });
+  useEffect(() => {
     localStorage.setItem('Wishlist', JSON.stringify(LikedCoins));
   }, [LikedCoins]);
 

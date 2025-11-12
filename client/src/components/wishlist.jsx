@@ -53,7 +53,15 @@ export function Wishlist() {
                     name={name}
                     symbol={symbol}
                     image={image}
-                    price={price} change7d={undefined} change1hr={undefined} change24hr={undefined} marketcap={undefined} volume={undefined} circulatingsupply={undefined} sparkline={undefined}                  />
+                    price={price}
+                    change7d={undefined}
+                    change1hr={undefined}
+                    change24hr={undefined}
+                    marketcap={undefined}
+                    volume={undefined}
+                    circulatingsupply={undefined}
+                    sparkline={undefined}
+                  />
                 );
               })}
             </tbody>

@@ -12,28 +12,26 @@ export function Market() {
   const [lastsortedkey, setlastsortedkey] = useState(null);
   const [sortstate, setsortstate] = useState(2);
   const { LikedCoins, setLikedCoins } = useContext(WishlistContext);
-  const window_size=8
-  const [windowstart,setwindow]=useState(0);
+  const window_size = 8;
+  const [windowstart, setwindow] = useState(0);
 
-  const windowsentinel=useRef(null);
-  const backendsentinel=useRef(null);
-  const counter=Math.floor(100/window_size)-1;
-  const unit_coutner=useRef(0);
+  const windowsentinel = useRef(null);
+  const backendsentinel = useRef(null);
+  const counter = Math.floor(100 / window_size) - 1;
+  const unit_coutner = useRef(0);
   const [page, setPage] = useState(1);
 
-  const displayNext=()=>{
-
-      setwindow((prev)=>{
-        console.log(prev+window_size)
-        unit_coutner.current++
-        if(unit_coutner.current==counter){
-             setPage(p=>p+1);
-             unit_coutner.current=0;
-        }
-        return prev+window_size
-      })
-
-  }
+  const displayNext = () => {
+    setwindow((prev) => {
+      console.log(prev + window_size);
+      unit_coutner.current++;
+      if (unit_coutner.current == counter) {
+        setPage((p) => p + 1);
+        unit_coutner.current = 0;
+      }
+      return prev + window_size;
+    });
+  };
 
   useEffect(() => {
     // @ts-ignore
@@ -41,36 +39,36 @@ export function Market() {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-        setmarketarray((prev)=>[...(prev||[]),...data]);
-        setoriginalarray((prev)=>[...(prev||[]),...data]);
+        setmarketarray((prev) => [...(prev || []), ...data]);
+        setoriginalarray((prev) => [...(prev || []), ...data]);
       })
       .catch((e) => console.log(e));
   }, [page]);
 
-useEffect(() => {
-  if (marketArray.length === 0) return;
+  useEffect(() => {
+    if (marketArray.length === 0) return;
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          displayNext();
-        }
-      });
-    },
-    { rootMargin: '0px 0px 100px 0px', threshold: 0 }
-  );
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            displayNext();
+          }
+        });
+      },
+      { rootMargin: '0px 0px 100px 0px', threshold: 0 }
+    );
 
-  if (windowsentinel.current) {
-    observer.observe(windowsentinel.current);
-  }
-  
-  return () => {
     if (windowsentinel.current) {
-      observer.unobserve(windowsentinel.current);
+      observer.observe(windowsentinel.current);
     }
-  };
-}, [marketArray]);
+
+    return () => {
+      if (windowsentinel.current) {
+        observer.unobserve(windowsentinel.current);
+      }
+    };
+  }, [marketArray]);
 
   const default_sort = (parameter) => {
     setmarketarray(originalArray);
@@ -126,7 +124,7 @@ useEffect(() => {
           <div className="widget">
             {/* <Note/> */}
             <table
-              className="inter-text"
+              
               style={{
                 height: '100%',
                 width: '100%',
@@ -137,9 +135,6 @@ useEffect(() => {
               }}
             >
               <thead
-                style={{
-                  fontSize: '1.25rem',
-                }}
               >
                 <tr>
                   <th></th>
@@ -170,8 +165,8 @@ useEffect(() => {
                 </tr>
               </thead>
 
-              <tbody>
-                {marketArray.slice(0,window_size + windowstart)?.map((coin) => {
+              <tbody style={{fontSize:'1rem'}}>
+                {marketArray.slice(0, window_size + windowstart)?.map((coin) => {
                   return (
                     <CoinCard
                       key={coin.id}
@@ -181,7 +176,7 @@ useEffect(() => {
                       name={coin.name}
                       symbol={coin.symbol}
                       price={coin.current_price}
-                      change7d  ={coin.price_change_percentage_7d_in_currency}
+                      change7d={coin.price_change_percentage_7d_in_currency}
                       change1hr={coin.price_change_percentage_1h_in_currency}
                       change24hr={coin.price_change_percentage_24h_in_currency}
                       marketcap={coin.market_cap}
@@ -192,9 +187,8 @@ useEffect(() => {
                   );
                 })}
               </tbody>
-              
             </table>
-            <div ref={windowsentinel}  style={{height:'1px',opacity:'0'}}></div>
+            <div ref={windowsentinel} style={{ height: '1px', opacity: '0' }}></div>
           </div>
         ) : (
           <div
