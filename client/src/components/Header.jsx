@@ -10,8 +10,14 @@ export function Header() {
     <header className="header">
       <div className="header-left">
         <img src={logo} className="logo" alt="Logo" />
-        <span className="title" onClick={() => {
-            navigate('/');}}>CRYPTO.</span>
+        <span
+          className="title"
+          onClick={() => {
+            navigate('/');
+          }}
+        >
+          CRYPTO.
+        </span>
       </div>
 
       <div className="nav">
@@ -36,7 +42,6 @@ export function Header() {
         >
           Wishlist
         </span>
-        
       </div>
     </header>
   );

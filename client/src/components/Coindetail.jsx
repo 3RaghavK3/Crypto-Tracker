@@ -21,7 +21,6 @@ export function CoinDetail() {
   //     })
   //     .catch((e) => console.error(e + 'Error in fetching coindetail'));
   // }, [id]);
-  
 
   useEffect(() => {
     setCoinDetailArray({
@@ -4986,7 +4985,7 @@ export function CoinDetail() {
   }, []);
 
   const [currency, setcurrency] = useState({ name: 'usd', symbol: '$' });
-  
+
   const market_price_change_perc = {
     '1h': CoinDetailArray?.market_data?.price_change_percentage_1h_in_currency?.[currency.name],
     '24h': CoinDetailArray?.market_data?.price_change_percentage_24h_in_currency?.[currency.name],
@@ -5034,26 +5033,28 @@ export function CoinDetail() {
             </div>
             <div>|</div>
             <div>Rank #{CoinDetailArray?.market_cap_rank}</div>
-          
           </div>
 
-          
           <div className="flex gap-4 items-center">
             <span className="text-xl">
               {' '}
               Last Updated at {new Date(CoinDetailArray?.last_updated).toLocaleTimeString()}{' '}
             </span>
-            <div className='flex'>
-                
-                <div className={`p-2 rounded-sm cursor-pointer ${currency.name=='usd'?'bg-green-500':'bg-black'}`
-              }
-              onClick={()=>setcurrency({ name: 'usd', symbol: '$' })}
-              >USD $</div>
-                <div className={`p-2 rounded-sm cursor-pointer ${currency.name=='inr'?'bg-green-500':'bg-black'}`}
-                onClick={()=>setcurrency({ name: 'inr', symbol: '₹' })}>INR ₹</div>
+            <div className="flex">
+              <div
+                className={`p-2 rounded-sm cursor-pointer ${currency.name == 'usd' ? 'bg-green-500' : 'bg-black'}`}
+                onClick={() => setcurrency({ name: 'usd', symbol: '$' })}
+              >
+                USD $
+              </div>
+              <div
+                className={`p-2 rounded-sm cursor-pointer ${currency.name == 'inr' ? 'bg-green-500' : 'bg-black'}`}
+                onClick={() => setcurrency({ name: 'inr', symbol: '₹' })}
+              >
+                INR ₹
+              </div>
+            </div>
           </div>
-          </div>
-          
         </div>
 
         <div className="grid grid-cols-3  gap-4 my-4">
@@ -5232,12 +5233,12 @@ export function CoinDetail() {
           </div>
 
           <div className="bg-[#0d1421] col-span-1  flex flex-col items-center justify-center">
-            <div className='flex gap-2 text-4xl font-bold'>
+            <div className="flex gap-2 text-4xl font-bold">
               <span>{CoinDetailArray?.name}</span>
-               <span>({CoinDetailArray?.symbol.toUpperCase()})</span>
-              </div>
-              
-            <img src={CoinDetailArray?.image.large} className='object-contain'/>
+              <span>({CoinDetailArray?.symbol.toUpperCase()})</span>
+            </div>
+
+            <img src={CoinDetailArray?.image.large} className="object-contain" />
           </div>
 
           <div className="bg-[#0d1421] grid grid-cols-2 grid-rows-2 p-4 gap-2">
@@ -5263,7 +5264,11 @@ export function CoinDetail() {
 
               <div className="flex justify-center text-2xl gap-2">
                 <span className="text-xl font-bold ">
-                  {formatnumber(CoinDetailArray?.watchlist_portfolio_users,currency.name,`compact`)}
+                  {formatnumber(
+                    CoinDetailArray?.watchlist_portfolio_users,
+                    currency.name,
+                    `compact`
+                  )}
                 </span>
                 <span className="text-lg">Users</span>
               </div>
@@ -5319,18 +5324,15 @@ export function CoinDetail() {
               </div>
               <div>Max Supply</div>
               <div className="font-bold text-center gap-2 flex">
-                {(CoinDetailArray?.market_data.max_supply) 
-                ?formatnumber(CoinDetailArray?.market_data.max_supply, currency.name)
-                :"No limit "}
+                {CoinDetailArray?.market_data.max_supply
+                  ? formatnumber(CoinDetailArray?.market_data.max_supply, currency.name)
+                  : 'No limit '}
                 {CoinDetailArray?.symbol.toUpperCase()}
               </div>
             </div>
           </div>
-         
         </div>
-         <div className='bg-[#0d1421] p-4 border-2 w-full'>
-              {CoinDetailArray?.description.en}
-          </div>
+        <div className="bg-[#0d1421] p-4 border-2 w-full">{CoinDetailArray?.description.en}</div>
       </div>
     </>
   );

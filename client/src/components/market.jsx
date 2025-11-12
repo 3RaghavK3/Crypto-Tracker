@@ -124,7 +124,6 @@ export function Market() {
           <div className="widget">
             {/* <Note/> */}
             <table
-              
               style={{
                 height: '100%',
                 width: '100%',
@@ -134,8 +133,7 @@ export function Market() {
                 textAlign: 'left',
               }}
             >
-              <thead
-              >
+              <thead>
                 <tr>
                   <th></th>
                   <th>#</th>
@@ -165,7 +163,7 @@ export function Market() {
                 </tr>
               </thead>
 
-              <tbody style={{fontSize:'1rem'}}>
+              <tbody style={{ fontSize: '1rem' }}>
                 {marketArray.slice(0, window_size + windowstart)?.map((coin) => {
                   return (
                     <CoinCard

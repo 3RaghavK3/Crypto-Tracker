@@ -47,7 +47,6 @@ tbody tr:hover {
   height: 30px;
 }
 
-
 .market-item {
   display: flex;
   width: 100%;
@@ -59,4 +58,3 @@ tbody tr:hover {
 .categories {
   grid-column: span 3;
 }
-
