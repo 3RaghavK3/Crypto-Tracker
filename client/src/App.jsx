@@ -18,7 +18,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Homepage />} />
             <Route path="/trending" element={<Trending />} />
-            <Route path="/coindetail/:id/:symbol" element={<CoinDetail />} />
+            <Route path="/coindetail/:id" element={<CoinDetail />} />
             <Route path="/trending" element={<Trending />} />
             <Route path="/wishlist" element={<Wishlist />} />
           </Routes>

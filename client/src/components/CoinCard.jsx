@@ -63,7 +63,7 @@ export function CoinCard({
   };
 
   return (
-    <tr onClick={() => navigate(`/coindetail/${id}/${symbol}`)}>
+    <tr onClick={() => navigate(`/coindetail/${id}`)}>
       <td
         onClick={(e) => {
           e.stopPropagation();

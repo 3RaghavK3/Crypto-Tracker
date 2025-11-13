@@ -7,70 +7,70 @@ import { WishlistContext } from '../context/wishlistcontext';
 import { Note } from './note';
 
 export function Market() {
-  const [marketArray, setmarketarray] = useState([]);
-  const [originalArray, setoriginalarray] = useState([]);
-  const [lastsortedkey, setlastsortedkey] = useState(null);
-  const [sortstate, setsortstate] = useState(2);
-  const { LikedCoins, setLikedCoins } = useContext(WishlistContext);
-  const window_size = 8;
-  const [windowstart, setwindow] = useState(0);
+    const [marketArray, setmarketarray] = useState([]);
+    const [originalArray, setoriginalarray] = useState([]);
+    const [lastsortedkey, setlastsortedkey] = useState(null);
+    const [sortstate, setsortstate] = useState(2);
+    const { LikedCoins, setLikedCoins } = useContext(WishlistContext);
+    const window_size = 8;
+    const [windowstart, setwindow] = useState(0);
 
-  const windowsentinel = useRef(null);
-  const backendsentinel = useRef(null);
-  const counter = Math.floor(100 / window_size) - 1;
-  const unit_coutner = useRef(0);
-  const [page, setPage] = useState(1);
+    const windowsentinel = useRef(null);
+    const backendsentinel = useRef(null);
+    const counter = Math.floor(100 / window_size) - 1;
+    const unit_coutner = useRef(0);
+    const [page, setPage] = useState(1);
 
-  const displayNext = () => {
-    setwindow((prev) => {
-      unit_coutner.current++;
-      if (unit_coutner.current == counter) {
-        setPage((p) => p + 1);
-        unit_coutner.current = 0;
-      }
-      return prev + window_size;
-    });
-  };
-
-  useEffect(() => {
-  fetch(`${import.meta.env.VITE_API_URL}/api/market?page=${page}`)
-    .then((res) => res.json())
-    .then((data) => { 
-      setmarketarray((prev) => {
-        const combined = [...(prev || []), ...data];
-        
-        if (lastsortedkey && sortstate !== 2) {
-          if (lastsortedkey === 'name') {
-            return [...combined].sort((a, b) => 
-              sortstate === 0 
-                ? a[lastsortedkey].localeCompare(b[lastsortedkey])
-                : b[lastsortedkey].localeCompare(a[lastsortedkey])
-            );
-          } else {
-            return [...combined].sort((a, b) => 
-              sortstate === 0 
-                ? a[lastsortedkey] - b[lastsortedkey]
-                : b[lastsortedkey] - a[lastsortedkey]
-            );
-          }
+    const displayNext = () => {
+      setwindow((prev) => {
+        unit_coutner.current++;
+        if (unit_coutner.current == counter) {
+          setPage((p) => p + 1);
+          unit_coutner.current = 0;
         }
-      
-        return combined;
+        return prev + window_size;
       });
-      
-      setoriginalarray((prev) => [...(prev || []), ...data]);
-    })
-    .catch((e) => console.log(e));
-}, [page]);
+    };
 
-  useEffect(() => {
-    if (marketArray.length === 0) return;
+    useEffect(() => {
+    fetch(`${import.meta.env.VITE_API_URL}/api/market?page=${page}`)
+      .then((res) => res.json())
+      .then((data) => { 
+        setmarketarray((prev) => {
+          const combined = [...(prev || []), ...data];
+          
+          if (lastsortedkey && sortstate !== 2) {
+            if (lastsortedkey === 'name') {
+              return [...combined].sort((a, b) => 
+                sortstate === 0 
+                  ? a[lastsortedkey].localeCompare(b[lastsortedkey])
+                  : b[lastsortedkey].localeCompare(a[lastsortedkey])
+              );
+            } else {
+              return [...combined].sort((a, b) => 
+                sortstate === 0 
+                  ? a[lastsortedkey] - b[lastsortedkey]
+                  : b[lastsortedkey] - a[lastsortedkey]
+              );
+            }
+          }
+        
+          return combined;
+        });
+        
+        setoriginalarray((prev) => [...(prev || []), ...data]);
+      })
+      .catch((e) => console.log(e));
+  }, [page]);
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            displayNext();
+    useEffect(() => {
+      if (marketArray.length === 0) return;
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              displayNext();
           }
         });
       },

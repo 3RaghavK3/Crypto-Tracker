@@ -1,29 +1,26 @@
-import { useState } from 'react';
-
 export function Note() {
-  const [shownote, setshownote] = useState(false);
-
   return (
-    <div 
-      className="bg-black-800 text-white rounded-lgshadow-lg  pl-4"
-      onMouseEnter={() => setshownote(true)} 
-      onMouseLeave={() => setshownote(false)}
-    >
-      <div className="text-xl border-b border-gray-600 flex gap-2 items-center">
-          <span>Note</span>
-          <span className='text-sm text-red-500'>(Hover)</span>
+    <div className="px-2 bg-black">
+           <div className=" text-white rounded-lg shadow-lg p-4 group">
+      <div className="text-xl border-b border-gray-600 cursor-pointer flex items-center gap-2">
+        <span>Note</span>
+        <span className="text-red-500 text-sm">(Hover)</span>
       </div>
 
-      <ul
-        className={`list-disc transition-all duration-300 ease-in-out pl-4 ${
-          shownote ? 'opacity-100 max-h-96' : 'opacity-0 max-h-0'
-        }`}
-      > 
-        <li>Make changes slowly to avoid hitting API limits</li>
+      <div className="transition-all duration-300  opacity-0 max-h-0  group-hover:opacity-100 group-hover:max-h-96 mt-2">
+        <ul className="list-disc p-4">
+          <li>
+          Please wait 15 seconds between clicks to avoid API limits.
+        </li>
         <li>Sort by clicking column headers.</li>
-        <li>The initial sort affects only loaded items. Full sorting is applied as additional items are fetched.</li>
+        <li>
+          The initial sort affects only loaded items. Full sorting is applied as additional items are fetched.
+        </li>
+        </ul>
         
-      </ul>
+      </div>
     </div>
+    </div>
+   
   );
 }
