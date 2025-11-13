@@ -34,16 +34,37 @@ export function Market() {
   };
 
   useEffect(() => {
-    // @ts-ignore
-    fetch(`http://localhost:3000/api/market?page=${page}`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        setmarketarray((prev) => [...(prev || []), ...data]);
-        setoriginalarray((prev) => [...(prev || []), ...data]);
-      })
-      .catch((e) => console.log(e));
-  }, [page]);
+  fetch(`http://localhost:3000/api/market?page=${page}`)
+    .then((res) => res.json())
+    .then((data) => {
+      console.log(data);
+      
+      setmarketarray((prev) => {
+        const combined = [...(prev || []), ...data];
+        
+        if (lastsortedkey && sortstate !== 2) {
+          if (lastsortedkey === 'name') {
+            return [...combined].sort((a, b) => 
+              sortstate === 0 
+                ? a[lastsortedkey].localeCompare(b[lastsortedkey])
+                : b[lastsortedkey].localeCompare(a[lastsortedkey])
+            );
+          } else {
+            return [...combined].sort((a, b) => 
+              sortstate === 0 
+                ? a[lastsortedkey] - b[lastsortedkey]
+                : b[lastsortedkey] - a[lastsortedkey]
+            );
+          }
+        }
+      
+        return combined;
+      });
+      
+      setoriginalarray((prev) => [...(prev || []), ...data]);
+    })
+    .catch((e) => console.log(e));
+}, [page]);
 
   useEffect(() => {
     if (marketArray.length === 0) return;
@@ -62,12 +83,13 @@ export function Market() {
     if (windowsentinel.current) {
       observer.observe(windowsentinel.current);
     }
-
+    
     return () => {
       if (windowsentinel.current) {
         observer.unobserve(windowsentinel.current);
       }
     };
+    
   }, [marketArray]);
 
   const default_sort = (parameter) => {
@@ -122,7 +144,7 @@ export function Market() {
       <div>
         {marketArray && marketArray.length > 0 ? (
           <div className="widget">
-            {/* <Note/> */}
+            <Note/>
             <table
               style={{
                 height: '100%',

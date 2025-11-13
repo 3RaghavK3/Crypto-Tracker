@@ -1,41 +1,29 @@
-import { useEffect, useRef, useState } from 'react';
-import './note.css';
+import { useState } from 'react';
 
 export function Note() {
-  const noteRef = useRef(null);
   const [shownote, setshownote] = useState(false);
 
-  const ShowNote = () => {
-    setshownote(!shownote);
-  };
-
-  useEffect(() => {
-    if (shownote) {
-      noteRef.current.classList.add('show');
-      noteRef.current.classList.remove('hide');
-    } else {
-      noteRef.current.classList.add('hide');
-      noteRef.current.classList.remove('show');
-    }
-  }, [shownote]);
-
   return (
-    <>
-      <div className="note" onMouseEnter={ShowNote} onMouseLeave={ShowNote}>
-        <div
-          style={{
-            fontSize: '1.25rem',
-            borderBottom: '1px solid grey',
-          }}
-        >
-          Tip
-        </div>
-
-        <ul ref={noteRef}>
-          <li> Use the options at the bottom to select how many rows per page, navigate pages</li>
-          <li> Sort by clicking column headers.</li>
-        </ul>
+    <div 
+      className="bg-black-800 text-white rounded-lgshadow-lg  pl-4"
+      onMouseEnter={() => setshownote(true)} 
+      onMouseLeave={() => setshownote(false)}
+    >
+      <div className="text-xl border-b border-gray-600 flex gap-2 items-center">
+          <span>Note</span>
+          <span className='text-sm text-red-500'>(Hover)</span>
       </div>
-    </>
+
+      <ul
+        className={`list-disc transition-all duration-300 ease-in-out pl-4 ${
+          shownote ? 'opacity-100 max-h-96' : 'opacity-0 max-h-0'
+        }`}
+      > 
+        <li>Make changes slowly to avoid hitting API limits</li>
+        <li>Sort by clicking column headers.</li>
+        <li>The initial sort affects only loaded items. Full sorting is applied as additional items are fetched.</li>
+        
+      </ul>
+    </div>
   );
 }
