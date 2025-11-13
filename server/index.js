@@ -14,7 +14,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 let timer=new Date(0);
-const RATE_LIMIT=10
+const RATE_LIMIT=15
 
 app.use(cors());
 app.use(express.json());
