@@ -13,9 +13,6 @@ const redis = new Redis({
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-let timer=new Date(0);
-const RATE_LIMIT=15
-
 app.use(cors());
 app.use(express.json());
 
@@ -26,7 +23,7 @@ app.get('/api/global', async (req, res) => { //10 min ttl
     const cached=await redis.get(cache_key)
     if (cached) return res.json(cached)
     
-    const response = await fetch(`https://api.coingecko.com/api/v3/global`);
+    const response = await fetch(`https://api.coingecko.com/api/v3/global?x_cg_demo_api_key=${process.env.CRYPTO_API_KEY}`);
     const data = await response.json();
     
     await redis.set(cache_key,data,{ex:600})
@@ -47,7 +44,7 @@ app.get('/api/market', async (req, res) => { //5 min ttl
     if(cached) return res.json(cached)
 
     const response = await fetch(
-      `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=100&page=${page}&sparkline=true&price_change_percentage=1h%2C24h%2C7d&precision=2`
+      `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=100&page=${page}&sparkline=true&price_change_percentage=1h%2C24h%2C7d&precision=2&x_cg_demo_api_key=${process.env.CRYPTO_API_KEY}`
     );
     const data = await response.json();
     await redis.set(cache_key,data,{ex:300})
@@ -64,7 +61,7 @@ app.get('/api/trending', async (req, res) => { //10 min ttl
   const cache_key="trending_data"
   const cached=await redis.get(cache_key)
   if(cached) return res.json(cached)
-    const response = await fetch(`https://api.coingecko.com/api/v3/search/trending`);
+    const response = await fetch(`https://api.coingecko.com/api/v3/search/trending?x_cg_demo_api_key=${process.env.CRYPTO_API_KEY}`);
     const data = await response.json();
     await redis.set(cache_key,data,{ex:600});
     res.status(200).json(data);
@@ -83,17 +80,7 @@ app.get('/api/coindetail', async (req, res) => { //4min ttl
     const cached=await redis.get(cache_key)
     if(cached) return res.json(cached)
       
-    const current=new Date();
-    if(current-timer<(RATE_LIMIT)*1000){
-        const waitTime = Math.ceil((RATE_LIMIT - (current - timer) / 1000)); 
-        return res.status(429).json({
-         message :`Server is currently busy. Please wait ${waitTime} second${waitTime > 1 ? 's' : ''} before trying again.`
-
-        })
-    }
-    timer=new Date();
-
-    const response = await fetch(`https://api.coingecko.com/api/v3/coins/${id}`);
+    const response = await fetch(`https://api.coingecko.com/api/v3/coins/${id}?x_cg_demo_api_key=${process.env.CRYPTO_API_KEY}`);
 
     const data = await response.json();
     await redis.set(cache_key,data,{ex:300});

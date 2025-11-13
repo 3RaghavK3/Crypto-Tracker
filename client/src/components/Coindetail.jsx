@@ -7,26 +7,15 @@ import { FormatContext } from '../context/Formatingcontext';
 export function CoinDetail() {
   const { id } = useParams();
   const [CoinDetailArray, setCoinDetailArray] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(null);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     setLoading(true);
     fetch(`${import.meta.env.VITE_API_URL}/api/coindetail?id=${id}`)
-      .then((res) => {
-        if (res.status === 429) {
-          return res.json().then((data) => {
-            setErrorMsg(data.message);
-            setLoading(false)
-            setCoinDetailArray(null);
-          });
-        } else {
-          return res.json().then((data) => {
+      .then((res) => res.json())
+      .then((data) => {
             setCoinDetailArray(data);
             setLoading(false)
-            setErrorMsg(null);
-          });
-        }
-      })
+          })
       .catch((e) => console.error(e + ' Error in fetching coindetail'))
   }, [id]);
 
@@ -50,15 +39,12 @@ export function CoinDetail() {
       <Header />
         
       <div className="p-4 text-white">
-        {errorMsg
-        ? <div className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white text-3xl text-center'>{errorMsg}</div>
-          :
+        {
           loading?<div className="flex items-center justify-center h-screen text-white text-3xl">
           Loading...
            </div>
            :<>
-           <div className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white text-3xl text-center'>{errorMsg}</div>
-        
+           
           <div className="bg-[#0d1421] text-white flex justify-between px-4 py-2 items-center text- rounded-xl">
             <div className="flex gap-8">
               <div>
