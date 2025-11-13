@@ -11,7 +11,6 @@ export function Trending() {
     fetch(`http://localhost:3000/api/trending`)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data['coins']);
         settrendingarray(data['coins']);
       })
       .catch((e) => console.log(e));

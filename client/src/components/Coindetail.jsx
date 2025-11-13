@@ -16,7 +16,6 @@ export function CoinDetail() {
       .then((res) => res.json())
       .then((data) => {
         setCoinDetailArray(data);
-        console.log(data);
       })
       .catch((e) => console.error(e + 'Error in fetching coindetail'));
   }, [id]);

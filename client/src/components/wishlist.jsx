@@ -43,8 +43,6 @@ export function Wishlist() {
             <tbody>
               {LikedCoins.map((coin) => {
                 const { id, rank, name, symbol, price, image } = coin;
-                console.log(name);
-                console.log(symbol);
                 return (
                   <CoinCard
                     key={id}

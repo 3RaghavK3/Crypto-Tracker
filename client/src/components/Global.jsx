@@ -10,7 +10,6 @@ export function Global() {
     fetch(`http://localhost:3000/api/global`)
       .then((res) => res.json())
       .then((json) => {
-        console.log(json.data);
         settglobalarray(json.data);
       })
       .catch((e) => console.log(e));

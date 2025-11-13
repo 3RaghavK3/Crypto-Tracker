@@ -23,7 +23,6 @@ export function Market() {
 
   const displayNext = () => {
     setwindow((prev) => {
-      console.log(prev + window_size);
       unit_coutner.current++;
       if (unit_coutner.current == counter) {
         setPage((p) => p + 1);
@@ -36,9 +35,7 @@ export function Market() {
   useEffect(() => {
   fetch(`http://localhost:3000/api/market?page=${page}`)
     .then((res) => res.json())
-    .then((data) => {
-      console.log(data);
-      
+    .then((data) => { 
       setmarketarray((prev) => {
         const combined = [...(prev || []), ...data];
         
