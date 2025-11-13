@@ -7,7 +7,7 @@ export function Global() {
 
   useEffect(() => {
     // @ts-ignore
-    fetch(`http://localhost:3000/api/global`)
+    fetch(`${import.meta.env.VITE_API_URL}/api/global`)
       .then((res) => res.json())
       .then((json) => {
         settglobalarray(json.data);

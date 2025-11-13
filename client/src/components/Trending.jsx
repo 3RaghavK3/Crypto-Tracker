@@ -8,7 +8,7 @@ export function Trending() {
 
   useEffect(() => {
     // @ts-ignore
-    fetch(`http://localhost:3000/api/trending`)
+    fetch(`${import.meta.env.VITE_API_URL}/api/trending`)
       .then((res) => res.json())
       .then((data) => {
         settrendingarray(data['coins']);

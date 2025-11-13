@@ -33,7 +33,7 @@ export function Market() {
   };
 
   useEffect(() => {
-  fetch(`http://localhost:3000/api/market?page=${page}`)
+  fetch(`${import.meta.env.VITE_API_URL}/api/market?page=${page}`)
     .then((res) => res.json())
     .then((data) => { 
       setmarketarray((prev) => {

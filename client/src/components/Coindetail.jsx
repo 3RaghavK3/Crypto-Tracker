@@ -12,7 +12,7 @@ export function CoinDetail() {
 
   useEffect(() => {
     // @ts-ignore
-    fetch(`http://localhost:3000/api/coindetail?id=${id}`)
+    fetch(`${import.meta.env.VITE_API_URL}/api/coindetail?id=${id}`)
       .then((res) => res.json())
       .then((data) => {
         setCoinDetailArray(data);

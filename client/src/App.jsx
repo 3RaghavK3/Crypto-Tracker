@@ -13,6 +13,7 @@ function App() {
   return (
     <>
       <FormatProvider>
+        
         <WishlistProvider>
           <Routes>
             <Route path="/" element={<Homepage />} />
