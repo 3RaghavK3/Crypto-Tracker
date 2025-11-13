@@ -16,6 +16,6 @@
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "node-fetch": "^3.3.2",
-    "upstash": "file:../../../../redis"
+    "@upstash/redis": "^1.31.1"
   }
 }
