@@ -96,7 +96,7 @@ app.get('/api/coindetail', async (req, res) => { //4min ttl
     const response = await fetch(`https://api.coingecko.com/api/v3/coins/${id}`);
 
     const data = await response.json();
-    await redis.set(cache_key,data,{ex:240});
+    await redis.set(cache_key,data,{ex:300});
     res.status(200).json(data);
   } catch (err) {
     console.log('Backend Error: ', err.message);
