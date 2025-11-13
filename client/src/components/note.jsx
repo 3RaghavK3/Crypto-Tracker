@@ -9,9 +9,6 @@ export function Note() {
 
       <div className="transition-all duration-300  opacity-0 max-h-0  group-hover:opacity-100 group-hover:max-h-96 mt-2">
         <ul className="list-disc p-4">
-          <li>
-          Please wait 15 seconds between clicks to avoid API limits.
-        </li>
         <li>Sort by clicking column headers.</li>
         <li>
           The initial sort affects only loaded items. Full sorting is applied as additional items are fetched.
