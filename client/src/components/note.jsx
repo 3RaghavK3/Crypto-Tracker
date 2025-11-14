@@ -7,7 +7,7 @@ export function Note() {
         <span className="text-red-500 text-sm">(Hover)</span>
       </div>
 
-      <div className="transition-all duration-300  opacity-0 max-h-0  group-hover:opacity-100 group-hover:max-h-96 mt-2">
+      <div className="transition-all duration-300  opacity-0 max-h-0 pointer-events-none group-hover:opacity-100 group-hover:max-h-96 mt-2">
         <ul className="list-disc p-4">
         <li>Sort by clicking column headers.</li>
         <li>
