@@ -8,7 +8,7 @@ export function Header() {
       <div className="flex items-center lg:h-10  lg:gap-2">
         <img src={logo} className="w-8 h-8" alt="Logo" />
         <span
-          className="font-bold"
+          className="font-bold cursor-pointer"
           onClick={() => {
             navigate('/');
           }}
@@ -17,7 +17,7 @@ export function Header() {
         </span>
       </div>
 
-      <div className="flex justify-between items-center gap-4 lg:gap-10 md:gap-7">
+      <div className="flex justify-between items-center gap-4 lg:gap-10 md:gap-7 cursor-pointer">
         <span
           onClick={() => {
             navigate('/');
