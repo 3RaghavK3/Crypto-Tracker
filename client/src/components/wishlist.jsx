@@ -11,36 +11,17 @@ export function Wishlist() {
       <Header />
 
       {LikedCoins && LikedCoins.length > 0 ? (
-        <div
-          className="widget"
-          style={{
-            overflowY: 'scroll',
-          }}
-        >
-          <span className="title-name">Wishlist</span>
-          <table
-            style={{
-              height: '100%',
-              width: '100%',
-              color: 'white',
-              padding: 0,
-              margin: 0,
-              textAlign: 'left',
-            }}
-          >
-            <thead
-              style={{
-                fontSize: '1.25rem',
-              }}
-            >
-              <tr>
-                <th></th>
-                <th>#</th>
-                <th>Name</th>
-                <th>Current Price</th>
-              </tr>
-            </thead>
-            <tbody>
+        <div className='grid mt-4
+            lg:grid-cols-[100px_200px_repeat(2,minmax(0,1fr))] lg:text-lg
+            md:grid-cols-[50px_100px_repeat(2,minmax(0,1fr))] md:text-base
+            grid-cols-[40px_40px_repeat(2,minmax(0,1fr))] text-sm
+            text-white items-center cursor-pointer px-2 w-full max-w-full min-w-full gap-y-2'> 
+
+              <div className='font-bold'></div>
+              <div className='font-bold'>#</div>
+              <div className='font-bold'>Name</div>
+              <div className='font-bold'>Current Price</div>
+            
               {LikedCoins.map((coin) => {
                 const { id, rank, name, symbol, price, image } = coin;
                 return (
@@ -62,22 +43,10 @@ export function Wishlist() {
                   />
                 );
               })}
-            </tbody>
-          </table>
         </div>
       ) : (
-        <div
-          style={{
-            display: 'flex',
-            flex: '1',
-            minHeight: '100vh',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '4rem',
-            color: 'white',
-          }}
-        >
-          No coins added to Wishlist
+        <div className='flex flex-1 items-center justify-center min-h-screen text-xl md:text-3xl lg:text-5xl text-white'>
+          No coins added to wishlist.
         </div>
       )}
     </>

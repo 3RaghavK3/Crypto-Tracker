@@ -23,7 +23,7 @@ export function Trending() {
       {trendingArray && trendingArray.length > 0 ? (
       
           <div className='grid mt-4
-            lg:grid-cols-[50px_100px_repeat(2,minmax(0,1fr))] lg:text-lg
+            lg:grid-cols-[100px_200px_repeat(2,minmax(0,1fr))] lg:text-lg
             md:grid-cols-[50px_100px_repeat(2,minmax(0,1fr))] md:text-base
             grid-cols-[40px_40px_repeat(2,minmax(0,1fr))] text-sm
             text-white items-center cursor-pointer px-2 w-full max-w-full min-w-full gap-y-2'> 
@@ -56,7 +56,7 @@ export function Trending() {
               })}     
             </div>  
       ) : (
-        <div className='flex flex-1 items-center justify-center min-h-screen text-lg text-white'>
+        <div className='flex flex-1 items-center justify-center min-h-screen text-xl md:text-3xl lg:text-5xl text-white'>
           Loading..
         </div>
       )}
