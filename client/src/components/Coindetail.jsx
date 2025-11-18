@@ -38,18 +38,18 @@ export function CoinDetail() {
     <>
       <Header />
         
-      <div className="p-4 text-white">
+      <div className="p-4 text-white text-sm lg:text-base">
         {
-          loading?<div className="flex items-center justify-center h-screen text-white text-3xl">
+          loading?<div className="flex items-center justify-center h-screen text-white text-xl md:text-3xl lg:text-5xl">
           Loading...
            </div>
-           :<>
+          :<>
            
-          <div className="bg-[#0d1421] text-white flex justify-between px-4 py-2 items-center text- rounded-xl">
-            <div className="flex gap-8">
+          <div className="bg-[#0d1421] text-white  p-4 py-2 items-center text- rounded-xl md:flex justify-between">
+            <div className="flex justify-between md:gap-3 lg:gap-8">
               <div>
                 <span>{CoinDetailArray?.name} </span>
-                <span>({CoinDetailArray?.symbol})</span>
+                <span className='hidden md:inline'>({CoinDetailArray?.symbol})</span>
               </div>
               <div>|</div>
               <div>
@@ -80,8 +80,8 @@ export function CoinDetail() {
               <div>Rank #{CoinDetailArray?.market_cap_rank}</div>
             </div>
 
-            <div className="flex gap-4 items-center">
-              <span className="text-xl">
+            <div className="flex items-center justify-between md:gap-2 lg:gap-4">
+              <span className="">
                 {' '}
                 Last Updated at {new Date(CoinDetailArray?.last_updated).toLocaleTimeString()}{' '}
               </span>
@@ -102,7 +102,7 @@ export function CoinDetail() {
             </div>
           </div>
 
-          <div className="grid grid-cols-3  gap-4 my-4">
+          <div className="grid lg:grid-cols-3  gap-4 my-4">
             <div className="bg-[#0d1421] grid grid-cols-2 gap-2 p-4">
               <div className="border border-2 border-white p-2 flex flex-col justify-around">
                 <div className="flex flex-col items-center ">
@@ -277,13 +277,16 @@ export function CoinDetail() {
               </div>
             </div>
 
-            <div className="bg-[#0d1421] col-span-1  flex flex-col items-center justify-center border-1">
-              <div className="flex gap-2 text-4xl font-bold">
+            <div className="bg-[#0d1421] p-4">
+              <div className='w-full h-full  flex flex-col items-center justify-center border-1'>
+                           <div className="flex gap-2 text-2xl font-bold md:text-4xl ">
                 <span>{CoinDetailArray?.name}</span>
                 <span>({CoinDetailArray?.symbol?.toUpperCase()})</span>
               </div>
 
-              <img src={CoinDetailArray?.image?.large} className="object-contain" />
+              <img src={CoinDetailArray?.image?.large} className="w-32 h-32 md:w-48 md:h-48 lg:w-64 lg:h-64" />
+              </div>
+             
             </div>
 
             <div className="bg-[#0d1421] grid grid-cols-2 grid-rows-2 p-4 gap-2">

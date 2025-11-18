@@ -7,7 +7,6 @@ export function Homepage() {
     <>
       <Header />
         <Global />
-
       <Market />
     </>
   );
