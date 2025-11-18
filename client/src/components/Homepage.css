@@ -2,13 +2,11 @@ html {
   background-color: black;
 }
 
-.grid-container {
-  display: flex;
-  flex-direction: row;
-  padding: 10px;
-  height: 300px;
-  width: 100%;
+*{
+  font-family: "Elms Sans", sans-serif;
+
 }
+
 
 .widget {
   position: relative;
@@ -16,27 +14,22 @@ html {
   border: 1px solid black;
 }
 
-td {
+/* td {
   height: 75px;
   width: 150px;
   word-wrap: break-word;
-  font-size: 1rem;
   font-weight: 500;
   border-bottom: 1px solid rgba(128, 128, 128, 0.42);
   border-top: 1px solid rgba(128, 128, 128, 0.42);
   text-align: center;
-}
+} */
 
-th {
-  border-top: 1px solid rgba(128, 128, 128, 0.42);
-  height: 50px;
-  text-align: center;
-  cursor: pointer;
-}
-tr {
+
+
+/* tr {
   font-weight: 700;
   color: white;
-}
+} */
 
 tbody tr:hover {
   cursor: pointer;

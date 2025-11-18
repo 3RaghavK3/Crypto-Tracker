@@ -51,7 +51,7 @@ export function CoinCard({
   const formatNumber = (num) => {
     return typeof num === 'number'
       ? num.toLocaleString(undefined, {
-          minimumFractionDigits: 2,
+          minimumFractionDigits: 0,
           maximumFractionDigits: 2,
         })
       : '--';
@@ -63,21 +63,14 @@ export function CoinCard({
   };
 
   return (
-    <tr onClick={() => navigate(`/coindetail/${id}`)}>
-      <td
+     <div className='contents lg:text-lg md:text-base' onClick={() => navigate(`/coindetail/${id}`)}>
+      <div 
         onClick={(e) => {
           e.stopPropagation();
           toggleStar();
         }}
       >
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            padding: '10px',
-          }}
-        >
+        <div className='flex items-center justify-center p-3 '>
           <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <polygon
               fill={isLiked ? 'yellow' : 'none'}
@@ -92,57 +85,60 @@ export function CoinCard({
             />
           </svg>
         </div>
-      </td>
+      </div >
 
-      {rank !== undefined && <td>{rank}</td>}
+      {rank !== undefined && <div>{rank}</div >}
 
-      {image !== undefined && name !== undefined && symbol !== undefined && (
-        <td>
-          <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '6px' }}>
-            <img src={image} className="symbol-coin" alt="logo" />
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <span style={{ fontWeight: 600 }}>{name}</span>&nbsp;
-              <span style={{ fontWeight: 400, color: 'rgb(163, 158, 158)' }}>
-                ({symbol?.toUpperCase()})
-              </span>
-            </div>
-          </div>
-        </td>
-      )}
+      {image && name && symbol && (
+    <div className="">
+      <div className="flex items-center gap-2">
+        <img src={image} className="symbol-coin" alt="logo" />
+        <div className="flex items-center">
+          <span>{name}</span>
+          <span className="text-gray-400 ml-1 hidden md:block lg:block">
+            ({symbol.toUpperCase()})
+          </span>
+        </div>
+      </div>
+    </div>
+  )}
 
-      {price !== undefined && <td>${formatNumber(price)}</td>}
+
+      {price !== undefined && <div  className=' p-2'>${formatNumber(price)}</div >}
 
       {change1hr !== undefined && (
-        <td style={{ color: checkTrend(change1hr)[0] }}>
+        <div className='hidden lg:block' style={{ color: checkTrend(change1hr)[0]  }}>
           {`${formatNumber(change1hr)}% ${checkTrend(change1hr)[1]}`}
-        </td>
+        </div >
       )}
 
       {change24hr !== undefined && (
-        <td style={{ color: checkTrend(change24hr)[0] }}>
+        <div  style={{ color: checkTrend(change24hr)[0] }} className=''>
           {`${formatNumber(change24hr)}% ${checkTrend(change24hr)[1]}`}
-        </td>
+        </div >
       )}
 
       {change7d !== undefined && (
-        <td style={{ color: checkTrend(change7d)[0] }}>
+        <div className='hidden lg:block '  style={{ color: checkTrend(change7d)[0] }}>
           {`${formatNumber(change7d)}% ${checkTrend(change7d)[1]}`}
-        </td>
+        </div >
       )}
 
-      {marketcap !== undefined && <td>${formatNumber(marketcap)}</td>}
+      {marketcap !== undefined && <div  className=' p-2 hidden md:block lg:block'>${formatNumber(marketcap)}</div >}
 
-      {volume !== undefined && <td>${formatNumber(volume)}</td>}
+      {volume !== undefined && <div  className=' p-2 hidden lg:block'>${formatNumber(volume)}</div >}
 
       {circulatingsupply !== undefined && symbol !== undefined && (
-        <td>{`${formatNumber(circulatingsupply)} ${symbol.toUpperCase()}`}</td>
+        <div  className=' p-2 hidden lg:block'>{`${formatNumber(circulatingsupply)} ${symbol.toUpperCase()}`}</div >
       )}
 
       {sparkline !== undefined && (
-        <td>
+        <div className='hidden md:block lg:block' >
           <SparkLine color={checkTrend(change7d)} prices={sparkline} />
-        </td>
+        </div >
       )}
-    </tr>
+    </div>
+    
+   
   );
 }

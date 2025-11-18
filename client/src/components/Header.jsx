@@ -1,17 +1,14 @@
 // @ts-ignore
 import logo from '../assets/logo.svg';
-// @ts-ignore
-import sun from '../assets/sun.svg';
-import './Header.css';
 import { useNavigate } from 'react-router-dom';
 export function Header() {
   const navigate = useNavigate();
   return (
-    <header className="header">
-      <div className="header-left">
-        <img src={logo} className="logo" alt="Logo" />
+    <header className="flex justify-between items-center bg-[#0d1421] text-white py-2 text-sm md:text-md lg:text-lg px-4 md:px-5 lg:px-6">
+      <div className="flex items-center lg:h-10  lg:gap-2">
+        <img src={logo} className="w-8 h-8" alt="Logo" />
         <span
-          className="title"
+          className="font-bold"
           onClick={() => {
             navigate('/');
           }}
@@ -20,7 +17,7 @@ export function Header() {
         </span>
       </div>
 
-      <div className="nav">
+      <div className="flex justify-between items-center gap-4 lg:gap-10 md:gap-7">
         <span
           onClick={() => {
             navigate('/');

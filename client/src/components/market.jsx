@@ -139,50 +139,40 @@ export function Market() {
   return (
     <>
       <div>
-        {marketArray && marketArray.length > 0 ? (
-          <div className="widget">
+         {marketArray && marketArray.length > 0 ? (
+          <div className="relative bg-[#0d1421]">
             <Note/>
-            <table
-              style={{
-                height: '100%',
-                width: '100%',
-                color: 'white',
-                padding: 0,
-                margin: 0,
-                textAlign: 'left',
-              }}
-            >
-              <thead>
-                <tr>
-                  <th></th>
-                  <th>#</th>
-                  <th onClick={() => handleSort('name')}>Name {getsortsymbol('name')}</th>
-                  <th onClick={() => handleSort('current_price')}>
-                    Price {getsortsymbol('current_price')}
-                  </th>
-                  <th onClick={() => handleSort('price_change_percentage_1h_in_currency')}>
+             <div className='grid 
+            lg:grid-cols-[50px_25px_repeat(2,minmax(0,1fr))_100px_100px_100px_repeat(4,minmax(0,1fr))] lg:text-lg
+            md:grid-cols-[40px_40px_repeat(2,minmax(0,1fr))_100px_repeat(2,minmax(0,1fr))] md:text-base
+            grid-cols-[40px_40px_100px_repeat(2,minmax(0,1fr))] text-sm
+            text-white items-center text-center cursor-pointer px-2 w-full max-w-full min-w-full'>
+                  <div></div>
+                  <div className='font-bold'>#</div> 
+                  <div className='font-bold text-center' onClick={() => handleSort('name')}>Name {getsortsymbol('name')}</div> 
+                  <div className='font-bold'  onClick={() => handleSort('current_price')}>
+                    Price {getsortsymbol('current_price')} 
+                  </div>
+                  <div className='font-bold hidden lg:block' onClick={() => handleSort('price_change_percentage_1h_in_currency')}>
                     1h % {getsortsymbol('price_change_percentage_1h_in_currency')}
-                  </th>
-                  <th onClick={() => handleSort('price_change_percentage_24h_in_currency')}>
-                    24h % {getsortsymbol('price_change_percentage_24h_in_currency')}
-                  </th>
-                  <th onClick={() => handleSort('price_change_percentage_7d_in_currency')}>
+                  </div>
+                  <div className='font-bold'  onClick={() => handleSort('price_change_percentage_24h_in_currency')}>
+                    24h % {getsortsymbol('price_change_percentage_24h_in_currency')} 
+                  </div>
+                  <div className='font-bold hidden lg:block' onClick={() => handleSort('price_change_percentage_7d_in_currency')}>
                     7d % {getsortsymbol('price_change_percentage_7d_in_currency')}
-                  </th>
-                  <th onClick={() => handleSort('market_cap')}>
-                    Market Cap {getsortsymbol('market_cap')}
-                  </th>
-                  <th onClick={() => handleSort('total_volume')}>
+                  </div>
+                  <div  className='font-bold hidden md:block lg:block' onClick={() => handleSort('market_cap')}>
+                    Market Cap {getsortsymbol('market_cap')} 
+                  </div>
+                  <div  className='font-bold hidden lg:block' onClick={() => handleSort('total_volume')}>
                     Total Volume {getsortsymbol('total_volume')}
-                  </th>
-                  <th onClick={() => handleSort('circulating_supply')}>
+                  </div>
+                  <div className='font-bold hidden lg:block' onClick={() => handleSort('circulating_supply')}>
                     Circulating Supply {getsortsymbol('circulating_supply')}
-                  </th>
-                  <th style={{ textAlign: 'right' }}>Last 7 days</th>
-                </tr>
-              </thead>
-
-              <tbody style={{ fontSize: '1rem' }}>
+                  </div>
+                  <div className='text-right font-bold hidden md:block lg:block'>Last 7 days</div>
+                
                 {marketArray.slice(0, window_size + windowstart)?.map((coin) => {
                   return (
                     <CoinCard
@@ -203,21 +193,12 @@ export function Market() {
                     />
                   );
                 })}
-              </tbody>
-            </table>
-            <div ref={windowsentinel} style={{ height: '1px', opacity: '0' }}></div>
+            
+            <div ref={windowsentinel}className='h-1 opacity-0'></div>
+            </div>
           </div>
         ) : (
-          <div
-            style={{
-              display: 'flex',
-              flex: '1',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '5rem',
-              color: 'white',
-            }}
-          >
+          <div className='flex items-center justify-center text-white min-h-[40vh] text-2xl md:text-3xl lg:text-5xl'>  
             Loading..
           </div>
         )}

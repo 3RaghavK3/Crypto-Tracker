@@ -20,7 +20,7 @@ export function Trending() {
     <>
       <Header />
       {trendingArray && trendingArray.length > 0 ? (
-        <div
+        <div 
           className="widget"
           style={{
             overflowY: 'scroll',

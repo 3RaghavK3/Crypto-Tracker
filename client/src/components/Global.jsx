@@ -1,7 +1,4 @@
-import './Global.css';
 import { useState, useEffect } from 'react';
-import { Market } from './market';
-import { Trending } from './Trending';
 export function Global() {
   const [globalarray, settglobalarray] = useState(null);
 
@@ -24,56 +21,41 @@ export function Global() {
 
   return (
     <>
-      <div className="widget" style={{ flex: 2, color: 'white' }}>
-        {/* <span className="title-name">Global</span> */}
+      <div className="relative bg-[#0d1421] flex-2 text-white md:text-lg lg:text-2xl text-sm">
+     
 
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            height: '100%',
-          }}
-        >
+        <div className='flex flex-row h-64 lg:h-96'>
           <div
-            className="grid-wrapper"
-            style={{
-              display: 'grid',
-              gridTemplateRows: 'repeat(2, 1fr)',
-              gridTemplateColumns: 'repeat(2, 1fr)',
-              gap: '10px',
-              padding: '5px',
-              backgroundColor: 'black',
-            }}
-          >
-            <div className="global-item">
-              <div className="global-title">Market-Cap</div>
-              <div className="value">
+            className="flex-2 grid grid-cols-2 grid-rows-2 gap-2 lg:gap-3 p-2 bg-black">
+            <div className="rounded-md bg-[#0d1421] p-2">
+              <div className="flex flex-col font-bold text-white">Market-Cap</div>
+              <div className="font-semibold text-[#f2d27b] break-words">
                 {globalarray ? `$${formatNumber(globalarray.total_market_cap.btc)}` : 'Loading...'}
               </div>
             </div>
 
-            <div className="global-item">
-              <div className="global-title">Total Volume (24h)</div>
-              <div className="value">
+            <div className="rounded-md bg-[#0d1421] p-2">
+              <div className="flex flex-col font-bold text-white">Total Volume (24h)</div>
+              <div className="font-semibold text-[#f2d27b] break-words">
                 {globalarray ? `$${formatNumber(globalarray.total_volume.usd)}` : 'Loading...'}
               </div>
             </div>
 
-            <div className="global-item">
-              <div className="global-title">24h Market Cap Change (%)</div>
-              <div className="value">
+            <div className="rounded-md bg-[#0d1421] p-2">
+              <div className="flex flex-col font-bold text-white">24h Market Cap Change (%)</div>
+              <div className="font-semibold text-[#f2d27b] break-words">
                 {globalarray ? (
                   <>
-                    <span className="value">
+                    <span className="font-semibold text-[#f2d27b] break-words">
                       {'$' + formatNumber(globalarray.market_cap_change_percentage_24h_usd) + '%'}
                     </span>
 
                     {globalarray.market_cap_change_percentage_24h_usd > 0 ? (
-                      <span className="value" style={{ color: '#17D082' }}>
+                      <span className="font-semibold text-[#f2d27b] break-words" style={{ color: '#17D082' }}>
                         ⮝
                       </span>
                     ) : (
-                      <span className="value" style={{ color: '#F43D46' }}>
+                      <span className="font-semibold text-[#f2d27b] break-words" style={{ color: '#F43D46' }}>
                         ⮟
                       </span>
                     )}
@@ -84,9 +66,9 @@ export function Global() {
               </div>
             </div>
 
-            <div className="global-item">
-              <div className="global-title">Active Cryptos</div>
-              <div className="value">
+            <div className="rounded-md bg-[#0d1421] p-2">
+              <div className="flex flex-col font-bold text-white break-words">Active Cryptos</div>
+              <div className="font-semibold text-[#f2d27b]">
                 {globalarray ? formatNumber(globalarray.active_cryptocurrencies) : 'Loading...'}
               </div>
             </div>
