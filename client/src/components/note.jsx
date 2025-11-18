@@ -10,7 +10,7 @@ export function Note() {
         <span className="text-red-500">(Click)</span>
       </div>
 
-      <div className={`transition-all duration-300 text-sm  ${!clicked ? 'opacity-0 max-h-0':'opacity-100 max-h-96'} `}>
+      <div className={`transition-all duration-300 text-sm  ${!clicked ? 'opacity-0 max-h-0 pointer-events-none':'opacity-100 max-h-96 pointer-events-auto'} `}>
         <ul className="list-disc p-4">
         <li>Sort by clicking column headers.</li>
         <li>

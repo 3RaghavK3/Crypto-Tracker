@@ -3,6 +3,7 @@ import './Homepage.css';
 import { CoinCard } from './CoinCard';
 import { WishlistContext } from '../context/wishlistcontext';
 import { Note } from './note';
+import { ArrowDown, ArrowUp } from 'lucide-react';
 
 export function Market() {
     const [marketArray, setmarketarray] = useState([]);
@@ -130,8 +131,8 @@ export function Market() {
   const getsortsymbol = (parameter) => {
     if (lastsortedkey !== parameter) return '';
     if (sortstate == 2) return '';
-    if (sortstate == 0) return '⮝';
-    if (sortstate == 1) return '⮟';
+    if (sortstate == 0) return <ArrowUp/>;
+    if (sortstate == 1) return <ArrowDown/>;
   };
 
   return (
@@ -145,31 +146,77 @@ export function Market() {
             md:grid-cols-[40px_40px_repeat(2,minmax(0,1fr))_100px_repeat(2,minmax(0,1fr))] md:text-base
             grid-cols-[40px_40px_100px_repeat(2,minmax(0,1fr))] text-sm
             text-white items-center text-center cursor-pointer px-2 w-full max-w-full min-w-full'>
-                  <div></div>
-                  <div className='font-bold'>#</div> 
-                  <div className='font-bold text-center' onClick={() => handleSort('name')}>Name {getsortsymbol('name')}</div> 
-                  <div className='font-bold'  onClick={() => handleSort('current_price')}>
-                    Price {getsortsymbol('current_price')} 
+                 <div></div>
+                  <div className="font-bold">#</div>
+
+                  <div 
+                    className="font-bold text-center cursor-pointer flex items-center justify-center gap-1"
+                    onClick={() => handleSort('name')}
+                  >
+                    <span>Name</span>
+                    <span>{getsortsymbol('name')}</span>
                   </div>
-                  <div className='font-bold hidden lg:block' onClick={() => handleSort('price_change_percentage_1h_in_currency')}>
-                    1h % {getsortsymbol('price_change_percentage_1h_in_currency')}
+
+                  <div 
+                    className="font-bold cursor-pointer flex items-center gap-1"
+                    onClick={() => handleSort('current_price')}
+                  >
+                    <span>Price</span>
+                    <span>{getsortsymbol('current_price')}</span>
                   </div>
-                  <div className='font-bold'  onClick={() => handleSort('price_change_percentage_24h_in_currency')}>
-                    24h % {getsortsymbol('price_change_percentage_24h_in_currency')} 
+
+                  <div 
+                    className="font-bold hidden lg:flex cursor-pointer items-center gap-1"
+                    onClick={() => handleSort('price_change_percentage_1h_in_currency')}
+                  >
+                    <span>1h %</span>
+                    <span>{getsortsymbol('price_change_percentage_1h_in_currency')}</span>
                   </div>
-                  <div className='font-bold hidden lg:block' onClick={() => handleSort('price_change_percentage_7d_in_currency')}>
-                    7d % {getsortsymbol('price_change_percentage_7d_in_currency')}
+
+                  <div 
+                    className="font-bold cursor-pointer flex items-center gap-1"
+                    onClick={() => handleSort('price_change_percentage_24h_in_currency')}
+                  >
+                    <span>24h %</span>
+                    <span>{getsortsymbol('price_change_percentage_24h_in_currency')}</span>
                   </div>
-                  <div  className='font-bold hidden md:block lg:block' onClick={() => handleSort('market_cap')}>
-                    Market Cap {getsortsymbol('market_cap')} 
+
+                  <div 
+                    className="font-bold hidden lg:flex cursor-pointer items-center gap-1"
+                    onClick={() => handleSort('price_change_percentage_7d_in_currency')}
+                  >
+                    <span>7d %</span>
+                    <span>{getsortsymbol('price_change_percentage_7d_in_currency')}</span>
                   </div>
-                  <div  className='font-bold hidden lg:block' onClick={() => handleSort('total_volume')}>
-                    Total Volume {getsortsymbol('total_volume')}
+
+                  <div 
+                    className="font-bold hidden md:flex cursor-pointer items-center gap-1"
+                    onClick={() => handleSort('market_cap')}
+                  >
+                    <span>Market Cap</span>
+                    <span>{getsortsymbol('market_cap')}</span>
                   </div>
-                  <div className='font-bold hidden lg:block' onClick={() => handleSort('circulating_supply')}>
-                    Circulating Supply {getsortsymbol('circulating_supply')}
+
+                  <div 
+                    className="font-bold hidden lg:flex cursor-pointer items-center gap-1"
+                    onClick={() => handleSort('total_volume')}
+                  >
+                    <span>Total Volume</span>
+                    <span>{getsortsymbol('total_volume')}</span>
                   </div>
-                  <div className='text-right font-bold hidden md:block lg:block'>Last 7 days</div>
+
+                  <div 
+                    className="font-bold hidden lg:flex cursor-pointer items-center gap-1"
+                    onClick={() => handleSort('circulating_supply')}
+                  >
+                    <span>Circulating Supply</span>
+                    <span>{getsortsymbol('circulating_supply')}</span>
+                  </div>
+
+                  <div className="font-bold text-right hidden md:block lg:block">
+                    <span>Last 7 days</span>
+                  </div>
+
                 
                 {marketArray.slice(0, window_size + windowstart)?.map((coin) => {
                   return (
