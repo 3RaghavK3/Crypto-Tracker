@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { SparkLine } from './SparkLine';
 import { useContext } from 'react';
 import { WishlistContext } from '../context/wishlistcontext';
+import { ArrowDown, ArrowUp } from 'lucide-react';
 
 export function CoinCard({
   id,
@@ -57,13 +58,14 @@ export function CoinCard({
       : '--';
   };
 
+
   const checkTrend = (percentage) => {
     if (typeof percentage !== 'number') return ['gray', ''];
-    return percentage > 0 ? ['#17D082', '⮝'] : ['#F43D46', '⮟'];
+    return percentage > 0 ? 'up' :'down' ;
   };
 
   return (
-     <div className='contents text-sm lg:text-lg md:text-base bg-[#0d1421] ' onClick={() => navigate(`/coindetail/${id}`)}>
+     <div className='contents text-sm lg:text-lg md:text-base' onClick={() => navigate(`/coindetail/${id}`)}>
       <div 
         onClick={(e) => {
           e.stopPropagation();
@@ -107,22 +109,38 @@ export function CoinCard({
       {price !== undefined && <div  className=' p-2'>${formatNumber(price)}</div >}
 
       {change1hr !== undefined && (
-        <div className='hidden lg:block' style={{ color: checkTrend(change1hr)[0]  }}>
-          {`${formatNumber(change1hr)}% ${checkTrend(change1hr)[1]}`}
-        </div >
+        <div className='hidden lg:flex items-center gap-1'>
+          {`${formatNumber(change1hr)}%`}
+          {checkTrend(change1hr) === 'up' ? (
+            <ArrowUp className='text-[#17D082]' />
+          ) : (
+            <ArrowDown className='text-[#F43D46]' />
+          )}
+        </div>
       )}
 
       {change24hr !== undefined && (
-        <div  style={{ color: checkTrend(change24hr)[0] }} className=''>
-          {`${formatNumber(change24hr)}% ${checkTrend(change24hr)[1]}`}
-        </div >
+        <div className='flex items-center gap-1'>
+          {`${formatNumber(change24hr)}%`}
+          {checkTrend(change24hr) === 'up' ? (
+            <ArrowUp className='text-[#17D082]' />
+          ) : (
+            <ArrowDown className='text-[#F43D46]' />
+          )}
+        </div>
       )}
 
       {change7d !== undefined && (
-        <div className='hidden lg:block '  style={{ color: checkTrend(change7d)[0] }}>
-          {`${formatNumber(change7d)}% ${checkTrend(change7d)[1]}`}
-        </div >
+        <div className='hidden lg:flex items-center gap-1'>
+          {`${formatNumber(change7d)}%`}
+          {checkTrend(change7d) === 'up' ? (
+            <ArrowUp className='text-[#17D082]' />
+          ) : (
+            <ArrowDown className='text-[#F43D46]' />
+          )}
+        </div>
       )}
+
 
       {marketcap !== undefined && <div  className=' p-2 hidden md:block lg:block'>${formatNumber(marketcap)}</div >}
 
@@ -134,7 +152,7 @@ export function CoinCard({
 
       {sparkline !== undefined && (
         <div className='hidden md:block lg:block' >
-          <SparkLine color={checkTrend(change7d)} prices={sparkline} />
+          <SparkLine color={checkTrend(change7d)==='up'?['#17D082']:['#F43D46']} prices={sparkline} />
         </div >
       )}
     </div>

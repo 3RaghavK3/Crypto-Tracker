@@ -1,3 +1,4 @@
+import { ArrowDown, ArrowUp } from 'lucide-react';
 import { useState, useEffect } from 'react';
 export function Global() {
   const [globalarray, settglobalarray] = useState(null);
@@ -46,19 +47,18 @@ export function Global() {
               <div className="font-semibold text-[#f2d27b] break-words">
                 {globalarray ? (
                   <>
-                    <span className="font-semibold text-[#f2d27b] break-words">
+                    <span className="font-semibold text-[#f2d27b] break-words flex">
                       {'$' + formatNumber(globalarray.market_cap_change_percentage_24h_usd) + '%'}
+                       {globalarray.market_cap_change_percentage_24h_usd > 0 ? (
+                      <ArrowUp className='text-[#17D082]' />
+                    
+                    ) : (
+                      <ArrowDown className='text-[#F43D46]' />
+                      
+                    )}
                     </span>
 
-                    {globalarray.market_cap_change_percentage_24h_usd > 0 ? (
-                      <span className="font-semibold text-[#f2d27b] break-words" style={{ color: '#17D082' }}>
-                        ⮝
-                      </span>
-                    ) : (
-                      <span className="font-semibold text-[#f2d27b] break-words" style={{ color: '#F43D46' }}>
-                        ⮟
-                      </span>
-                    )}
+                   
                   </>
                 ) : (
                   'Loading...'

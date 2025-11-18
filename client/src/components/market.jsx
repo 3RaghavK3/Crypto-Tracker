@@ -1,7 +1,5 @@
 import { createElement, useEffect, useState, useContext, useRef } from 'react';
 import './Homepage.css';
-import { param, s } from 'framer-motion/client';
-import { Link, useFetcher } from 'react-router-dom';
 import { CoinCard } from './CoinCard';
 import { WishlistContext } from '../context/wishlistcontext';
 import { Note } from './note';

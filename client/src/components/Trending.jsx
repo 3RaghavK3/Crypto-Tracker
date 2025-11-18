@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import './Trending.css';
 import { CoinCard } from './CoinCard';
 import { Header } from './Header';
 
