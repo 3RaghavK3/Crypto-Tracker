@@ -63,7 +63,7 @@ export function CoinCard({
   };
 
   return (
-     <div className='contents lg:text-lg md:text-base' onClick={() => navigate(`/coindetail/${id}`)}>
+     <div className='contents text-sm lg:text-lg md:text-base bg-[#0d1421]' onClick={() => navigate(`/coindetail/${id}`)}>
       <div 
         onClick={(e) => {
           e.stopPropagation();

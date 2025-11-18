@@ -12,6 +12,7 @@ export function Trending() {
       .then((res) => res.json())
       .then((data) => {
         settrendingarray(data['coins']);
+        console.log(data['coins'])
       })
       .catch((e) => console.log(e));
   }, []);
@@ -20,37 +21,19 @@ export function Trending() {
     <>
       <Header />
       {trendingArray && trendingArray.length > 0 ? (
-        <div 
-          className="widget"
-          style={{
-            overflowY: 'scroll',
-          }}
-        >
-          <span className="title-name">Trending</span>
-          <table
-            style={{
-              height: '100%',
-              width: '100%',
-              color: 'white',
-              padding: 0,
-              margin: 0,
-              textAlign: 'left',
-            }}
-          >
-            <thead
-              style={{
-                fontSize: '1.25rem',
-              }}
-            >
-              <tr>
-                <th></th>
-                <th>#</th>
-                <th>Name</th>
-                <th>Current Price</th>
-              </tr>
-            </thead>
+      
+          <div className='grid mt-4
+            lg:grid-cols-[50px_100px_repeat(2,minmax(0,1fr))] lg:text-lg
+            md:grid-cols-[50px_100px_repeat(2,minmax(0,1fr))] md:text-base
+            grid-cols-[40px_40px_repeat(2,minmax(0,1fr))] text-sm
+            text-white items-center cursor-pointer px-2 w-full max-w-full min-w-full gap-y-2'> 
 
-            <tbody style={{}}>
+              <div className='font-bold'></div>
+              <div className='font-bold'>#</div>
+              <div className='font-bold'>Name</div>
+              <div className='font-bold'>Current Price</div>
+
+
               {trendingArray.map((coin) => {
                 return (
                   <CoinCard
@@ -70,22 +53,10 @@ export function Trending() {
                     sparkline={undefined}
                   />
                 );
-              })}
-            </tbody>
-          </table>
-        </div>
+              })}     
+            </div>  
       ) : (
-        <div
-          style={{
-            display: 'flex',
-            flex: '1',
-            alignItems: 'center',
-            justifyContent: 'center',
-            minHeight: '100vh',
-            fontSize: '4rem',
-            color: 'white',
-          }}
-        >
+        <div className='flex flex-1 items-center justify-center min-h-screen text-lg text-white'>
           Loading..
         </div>
       )}
