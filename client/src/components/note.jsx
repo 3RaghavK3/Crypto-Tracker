@@ -12,9 +12,9 @@ export function Note() {
 
       <div className={`transition-all duration-300 text-sm  ${!clicked ? 'opacity-0 max-h-0 pointer-events-none':'opacity-100 max-h-96 pointer-events-auto'} `}>
         <ul className="list-disc p-4">
-        <li>Sort by clicking column headers.</li>
+        <li>Sort by clicking column headers (applies to visible coins).</li>
         <li>
-          The initial sort affects only loaded items. Full sorting is applied as additional items are fetched.
+          Click on a coin row to view its details.
         </li>
         </ul>
         
