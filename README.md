@@ -171,14 +171,14 @@ GET /health
 Returns server status.
 ## Screenshots
 
-**Coin Detail (Laptop)**  
-![Coin Detail – Laptop](https://github.com/user-attachments/assets/0ef9f96d-71a2-4fb1-bc16-9a9db665e0a5)
-
 **Market Page (Laptop)**  
 ![Market – Laptop](https://github.com/user-attachments/assets/b920cd43-0c17-463a-9585-97679dadc38a)
 
 **Market Page (Mobile)**  
 ![Market – Mobile](https://github.com/user-attachments/assets/d313a4ee-07b9-46d4-8878-93a1bbd6e8e5)
+
+**Coin Detail (Laptop)**  
+![Coin Detail – Laptop](https://github.com/user-attachments/assets/0ef9f96d-71a2-4fb1-bc16-9a9db665e0a5)
 
 **Trending Coins (Mobile)**  
 ![Trending – Mobile](https://github.com/user-attachments/assets/c1964062-5597-4e0f-8a6b-93ee7b402cb4)
@@ -188,4 +188,5 @@ Returns server status.
 - Add INR pricing to the homepage.
 - Expand support to NFTs and other digital assets.
 - Introduce AI-based prediction models (classifiers and time series regressors) for price trends.
+
 - Aggregate news and articles for each coin using generative LLMs
