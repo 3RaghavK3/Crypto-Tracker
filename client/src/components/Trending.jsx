@@ -11,7 +11,6 @@ export function Trending() {
       .then((res) => res.json())
       .then((data) => {
         settrendingarray(data['coins']);
-        console.log(data['coins'])
       })
       .catch((e) => console.log(e));
   }, []);
