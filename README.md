@@ -186,5 +186,5 @@ Returns server status.
 - Add INR pricing to the homepage.
 - Expand support to NFTs and other digital assets.
 - Introduce AI-based prediction models (classifiers and time series regressors) for price trends.
-
 - Aggregate news and articles for each coin using generative LLMs
+
