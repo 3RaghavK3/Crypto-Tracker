@@ -1,0 +1,20 @@
+create table coin_detail (
+    coin_id varchar(255) primary key references coins(coin_id) on delete cascade,
+    description text,
+    high_24h decimal,
+    low_24h decimal,
+    price_change_14d decimal,
+    price_change_30d decimal,
+    ath decimal,
+    ath_date timestamptz,
+    ath_change_percent decimal,
+    atl decimal,
+    atl_date timestamptz,
+    atl_change_percent decimal,
+    sentiment_bullish decimal,
+    sentiment_bearish decimal,
+    watchlist_users bigint,
+    market_cap_change_24h_percent decimal,
+    max_supply decimal,
+    last_synced_at timestamptz
+);
