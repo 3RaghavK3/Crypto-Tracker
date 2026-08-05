@@ -1,4 +1,5 @@
 import { coinGeckoApi } from "../config/coingecko.js";
+import pool from "../config/db.js";
 
 export const getMarkets = async (
     vsCurrency: string,
@@ -45,4 +46,55 @@ export const search = async (query: string) => {
     });
 
     return response.data;
+};
+
+export const bulkUpsertCoins = async (coins: any[]) => {
+    if (coins.length === 0) return;
+
+    const values = [];
+    const params = [];
+    let paramIndex = 1;
+
+    for (const coin of coins) {
+        values.push(`($${paramIndex++}, $${paramIndex++}, $${paramIndex++}, $${paramIndex++}, $${paramIndex++}, $${paramIndex++}, $${paramIndex++}, $${paramIndex++}, $${paramIndex++}, $${paramIndex++}, $${paramIndex++}, $${paramIndex++}, $${paramIndex++}, NOW())`);
+        params.push(
+            coin.id,
+            coin.symbol,
+            coin.name,
+            coin.image,
+            coin.current_price,
+            coin.market_cap ? Math.round(Number(coin.market_cap)) : null,
+            coin.market_cap_rank,
+            coin.total_volume ? Math.round(Number(coin.total_volume)) : null,
+            coin.circulating_supply,
+            coin.price_change_percentage_1h_in_currency,
+            coin.price_change_percentage_24h_in_currency,
+            coin.price_change_percentage_7d_in_currency,
+            coin.sparkline_in_7d ? JSON.stringify(coin.sparkline_in_7d) : null
+        );
+    }
+
+    const query = `
+        INSERT INTO coins (
+            coin_id, symbol, name, image_url, current_price, market_cap, market_cap_rank,
+            total_volume, circulating_supply, price_change_1h, price_change_24h, price_change_7d,
+            sparkline_7d, last_synced_at
+        ) VALUES ${values.join(", ")}
+        ON CONFLICT (coin_id) DO UPDATE SET
+            symbol = EXCLUDED.symbol,
+            name = EXCLUDED.name,
+            image_url = EXCLUDED.image_url,
+            current_price = EXCLUDED.current_price,
+            market_cap = EXCLUDED.market_cap,
+            market_cap_rank = EXCLUDED.market_cap_rank,
+            total_volume = EXCLUDED.total_volume,
+            circulating_supply = EXCLUDED.circulating_supply,
+            price_change_1h = EXCLUDED.price_change_1h,
+            price_change_24h = EXCLUDED.price_change_24h,
+            price_change_7d = EXCLUDED.price_change_7d,
+            sparkline_7d = EXCLUDED.sparkline_7d,
+            last_synced_at = EXCLUDED.last_synced_at;
+    `;
+
+    await pool.query(query, params);
 };
