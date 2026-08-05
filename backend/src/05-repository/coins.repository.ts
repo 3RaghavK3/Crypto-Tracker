@@ -5,7 +5,8 @@ export const getMarkets = async (
     order: string,
     perPage: number,
     page: number,
-    sparkline: boolean
+    sparkline: boolean,
+    priceChangePercentage: string
 ) => {
     const response = await coinGeckoApi.get("/coins/markets", {
         params: {
@@ -14,6 +15,7 @@ export const getMarkets = async (
             per_page: perPage,
             page,
             sparkline,
+            price_change_percentage: priceChangePercentage,
         },
     });
 

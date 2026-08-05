@@ -17,7 +17,7 @@ export interface Purpose{
 export const sendOtp =async(email:string,purpose:"signup"|"forgot")=>{
        const subject = (purpose==="signup")?"CryptoX - Sign Up Verification":"CryptoX - Password Reset";
        const otp=generateOtp();
-       await redis.set(`${purpose}:otp:${email}`,otp,{ex:600})
+       await redis.set(`${purpose}:otp:${email}`, String(otp), "EX", 600);
        await transporter.sendMail({
          from: "33raghavk33@gmail.com",
          to: email,
@@ -40,12 +40,12 @@ export const signUp =async(name:string,email:string,password:string)=>{
      const passwordHash=await bcrypt.hash(password,12);
      await redis.set(
       `signup:${email}`,
-      {
+      JSON.stringify({
          name,
          email,
          passwordHash,
-      },
-      { ex: 600 }
+      }),
+      "EX", 600
       );
      await sendOtp(email,"signup");
      return {
@@ -56,18 +56,19 @@ export const signUp =async(name:string,email:string,password:string)=>{
 export const verifyOtp=async(email:string,otp:string,purpose:"signup"|"forgot")=>{
 
    if(purpose==="signup"){
-      const details = await redis.get<{
+      const detailsStr = await redis.get(`signup:${email}`);
+      const details = detailsStr ? JSON.parse(detailsStr) as {
       name: string;
       email: string;
       passwordHash: string;
-      }>(`signup:${email}`);
+      } : null;
 
 
      if(!details){
        throw new AppError(400,"Signup session has expired. Please sign up again.")
      }
 
-     const actualOtp = await redis.get<string | number>(`signup:otp:${email}`);
+     const actualOtp = await redis.get(`signup:otp:${email}`);
      if(!actualOtp){
        throw new AppError(400,"OTP has expired.Please request a new OTP")
      }
@@ -85,7 +86,7 @@ export const verifyOtp=async(email:string,otp:string,purpose:"signup"|"forgot")=
      }
    }
    else{
-     const actualOtp = await redis.get<string | number>(`forgot:otp:${email}`);
+     const actualOtp = await redis.get(`forgot:otp:${email}`);
      if(!actualOtp){
        throw new AppError(400,"OTP has expired.Please request a new OTP")
      }
@@ -94,7 +95,7 @@ export const verifyOtp=async(email:string,otp:string,purpose:"signup"|"forgot")=
         throw new AppError(400, "Invalid OTP. Please try again.");
      }
 
-     await redis.set(`forgot:verified:${email}`,true,{ex:600});
+     await redis.set(`forgot:verified:${email}`, "true", "EX", 600);
      await redis.del(`forgot:otp:${email}`);
 
       return {
@@ -185,7 +186,7 @@ export const resetPassword=async(email:string,newPassword:string,confirmPassword
          throw new AppError(401,"Invalid email or password");
      }
 
-     const isForgotVerified=await redis.get<boolean>(`forgot:verified:${email}`);
+     const isForgotVerified = (await redis.get(`forgot:verified:${email}`)) === "true";
      if (!isForgotVerified) {
       throw new AppError(401, "Please verify your OTP first.");
       }
