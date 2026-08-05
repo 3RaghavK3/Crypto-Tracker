@@ -2,6 +2,7 @@ import { Worker } from "bullmq";
 import { connection, marketQueue } from "../config/bullmq.js";
 import * as coinsService from "../04-services/coins.service.js";
 import { bulkUpsertCoins } from "../05-repository/coins.repository.js";
+import pool from "../config/db.js";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -85,22 +86,19 @@ worker.on("failed", (job, err) => {
     console.error(`Job ${job?.name} failed with error:`, err);
 });
 
-// Setup scheduled jobs on startup
 const setupJobs = async () => {
     console.log("Clearing old job schedulers...");
     const schedulers = await marketQueue.getJobSchedulers();
     for (const scheduler of schedulers) {
         if (scheduler.id) await marketQueue.removeJobScheduler(scheduler.id);
     }
-    
+
     console.log("Adding repeatable jobs...");
-    
     await marketQueue.upsertJobScheduler("scheduler-top250", { pattern: "* * * * *" }, { name: "sync-top250" });
     await marketQueue.upsertJobScheduler("scheduler-251-500", { pattern: "*/5 * * * *" }, { name: "sync-251-500" });
     await marketQueue.upsertJobScheduler("scheduler-501-2000", { pattern: "*/15 * * * *" }, { name: "sync-501-2000" });
     await marketQueue.upsertJobScheduler("scheduler-2001-5000", { pattern: "0 * * * *" }, { name: "sync-2001-5000" });
     await marketQueue.upsertJobScheduler("scheduler-5001-plus", { pattern: "0 */6 * * *" }, { name: "sync-5001-plus" });
-
     console.log("Scheduler setup complete.");
 };
 
