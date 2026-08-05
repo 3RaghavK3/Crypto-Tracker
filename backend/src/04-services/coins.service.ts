@@ -5,14 +5,16 @@ export const getMarkets = async (
     order: string,
     perPage: number,
     page: number,
-    sparkline: boolean
+    sparkline: boolean,
+    priceChangePercentage: string
 ) => {
     return await coinsRepository.getMarkets(
         vsCurrency,
         order,
         perPage,
         page,
-        sparkline
+        sparkline,
+        priceChangePercentage
     );
 };
 

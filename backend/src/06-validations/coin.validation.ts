@@ -25,10 +25,13 @@ export const getMarketsSchema = z.object({
         .min(1)
         .default(1),
 
-    sparkline: z
-        .enum(["true", "false"])
-        .default("false")
-        .transform((value) => value === "true"),
+    sparkline: z.coerce
+        .boolean()
+        .default(true),
+
+    price_change_percentage: z
+        .string()
+        .default("1h,24h,7d"),
 });
 
 export const getCoinDetailSchema = z.object({

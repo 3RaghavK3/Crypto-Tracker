@@ -1,0 +1,109 @@
+import { Worker } from "bullmq";
+import { connection, marketQueue } from "../config/bullmq.js";
+import * as coinsService from "../04-services/coins.service.js";
+import { bulkUpsertCoins } from "../05-repository/coins.repository.js";
+
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+async function syncPages(startPage: number, endPage: number) {
+    let page = startPage;
+    
+    while (page <= endPage) {
+        try {
+            console.log(`Fetching page ${page}...`);
+            const coins = await coinsService.getMarkets(
+                "usd",
+                "market_cap_desc",
+                250,
+                page,
+                true,
+                "1h,24h,7d"
+            );
+
+            if (!coins || coins.length === 0) {
+                console.log(`Page ${page} returned empty. Terminating loop.`);
+                break;
+            }
+
+            console.log(`Fetched ${coins.length} coins on page ${page}. Upserting...`);
+            await bulkUpsertCoins(coins);
+            
+            if (coins.length < 250 && endPage === Infinity) {
+                console.log(`Page ${page} returned fewer than 250 coins. Terminating loop.`);
+                break;
+            }
+            
+            page++;
+            if (page <= endPage) {
+                await delay(1000); // 1 second delay between requests
+            }
+        } catch (error: any) {
+            console.error(`Error fetching page ${page}:`, error.message);
+            if (error.response?.status === 429) {
+                console.log("Rate limited! Cooldown for 5 seconds...");
+                await delay(5000);
+            } else {
+                throw error;
+            }
+        }
+    }
+}
+
+const worker = new Worker(
+    "market-sync",
+    async (job) => {
+        console.log(`Processing job ${job.name} (ID: ${job.id})`);
+        
+        switch (job.name) {
+            case "sync-top250":
+                await syncPages(1, 1);
+                break;
+            case "sync-251-500":
+                await syncPages(2, 2);
+                break;
+            case "sync-501-2000":
+                await syncPages(3, 8);
+                break;
+            case "sync-2001-5000":
+                await syncPages(9, 20);
+                break;
+            case "sync-5001-plus":
+                await syncPages(21, Infinity);
+                break;
+            default:
+                console.warn(`Unknown job name: ${job.name}`);
+        }
+    },
+    { connection }
+);
+
+worker.on("completed", (job) => {
+    console.log(`Job ${job.name} completed successfully.`);
+});
+
+worker.on("failed", (job, err) => {
+    console.error(`Job ${job?.name} failed with error:`, err);
+});
+
+// Setup scheduled jobs on startup
+const setupJobs = async () => {
+    console.log("Clearing old job schedulers...");
+    const schedulers = await marketQueue.getJobSchedulers();
+    for (const scheduler of schedulers) {
+        if (scheduler.id) await marketQueue.removeJobScheduler(scheduler.id);
+    }
+    
+    console.log("Adding repeatable jobs...");
+    
+    await marketQueue.upsertJobScheduler("scheduler-top250", { pattern: "* * * * *" }, { name: "sync-top250" });
+    await marketQueue.upsertJobScheduler("scheduler-251-500", { pattern: "*/5 * * * *" }, { name: "sync-251-500" });
+    await marketQueue.upsertJobScheduler("scheduler-501-2000", { pattern: "*/15 * * * *" }, { name: "sync-501-2000" });
+    await marketQueue.upsertJobScheduler("scheduler-2001-5000", { pattern: "0 * * * *" }, { name: "sync-2001-5000" });
+    await marketQueue.upsertJobScheduler("scheduler-5001-plus", { pattern: "0 */6 * * *" }, { name: "sync-5001-plus" });
+
+    console.log("Scheduler setup complete.");
+};
+
+setupJobs().catch(console.error);
+
+console.log("BullMQ Worker started and listening on 'market-sync' queue...");

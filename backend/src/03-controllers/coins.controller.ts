@@ -14,6 +14,7 @@ export const getMarkets = async (
             per_page,
             page,
             sparkline,
+            price_change_percentage
         } = req.query as unknown as GetMarketsInput;
 
         const result = await coinsService.getMarkets(
@@ -21,7 +22,8 @@ export const getMarkets = async (
             order,
             per_page,
             page,
-            sparkline
+            sparkline,
+            price_change_percentage
         );
 
         res.status(200).json(result);

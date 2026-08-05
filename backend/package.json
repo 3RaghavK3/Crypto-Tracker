@@ -7,8 +7,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsx watch src/server.ts",
+    "worker": "tsx src/workers/market.worker.ts",
     "build": "tsc",
     "start": "node dist/server.js",
+    "start:worker": "node dist/workers/market.worker.js",
     "bootstrap:coins": "tsx src/scripts/bootstrap-coins.ts"
   },
   "keywords": [],
