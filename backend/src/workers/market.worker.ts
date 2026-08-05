@@ -1,7 +1,7 @@
 import { Worker } from "bullmq";
 import { connection, marketQueue } from "../config/bullmq.js";
 import * as coinsService from "../04-services/coins.service.js";
-import { bulkUpsertCoins } from "../05-repository/coins.repository.js";
+import { bulkUpsertCoins, upsertGlobalData, syncTrendingCoins } from "../05-repository/coins.repository.js";
 import pool from "../config/db.js";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -71,6 +71,18 @@ const worker = new Worker(
             case "sync-5001-plus":
                 await syncPages(21, Infinity);
                 break;
+            case "sync-global":
+                console.log("Fetching global market stats...");
+                const globalData = await coinsService.getGlobalData();
+                await upsertGlobalData(globalData);
+                console.log("Global market stats synchronized.");
+                break;
+            case "sync-trending":
+                console.log("Fetching trending coins...");
+                const trendingData = await coinsService.getTrendingCoins();
+                await syncTrendingCoins(trendingData);
+                console.log("Trending coins synchronized.");
+                break;
             default:
                 console.warn(`Unknown job name: ${job.name}`);
         }
@@ -99,6 +111,8 @@ const setupJobs = async () => {
     await marketQueue.upsertJobScheduler("scheduler-501-2000", { pattern: "*/15 * * * *" }, { name: "sync-501-2000" });
     await marketQueue.upsertJobScheduler("scheduler-2001-5000", { pattern: "0 * * * *" }, { name: "sync-2001-5000" });
     await marketQueue.upsertJobScheduler("scheduler-5001-plus", { pattern: "0 */6 * * *" }, { name: "sync-5001-plus" });
+    await marketQueue.upsertJobScheduler("scheduler-global", { pattern: "*/30 * * * *" }, { name: "sync-global" });
+    await marketQueue.upsertJobScheduler("scheduler-trending", { pattern: "*/30 * * * *" }, { name: "sync-trending" });
     console.log("Scheduler setup complete.");
 };
 

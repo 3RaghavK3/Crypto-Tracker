@@ -98,3 +98,75 @@ export const bulkUpsertCoins = async (coins: any[]) => {
 
     await pool.query(query, params);
 };
+
+export const upsertGlobalData = async (globalData: any) => {
+    const data = globalData.data;
+    if (!data) return;
+
+    const client = await pool.connect();
+
+    try {
+        await client.query("BEGIN");
+        await client.query("DELETE FROM global_market_stats");
+
+        const query = `
+            INSERT INTO global_market_stats (
+                id, total_market_cap, total_volume_24h, market_cap_change_percentage_24h,
+                active_cryptocurrencies, last_synced_at
+            ) VALUES (
+                1, $1, $2, $3, $4, NOW()
+            )
+        `;
+
+        const params = [
+            data.total_market_cap?.usd || 0,
+            data.total_volume?.usd || 0,
+            data.market_cap_change_percentage_24h_usd || 0,
+            data.active_cryptocurrencies || 0
+        ];
+
+        await client.query(query, params);
+        await client.query("COMMIT");
+    } catch (e) {
+        await client.query("ROLLBACK");
+        throw e;
+    } finally {
+        client.release();
+    }
+};
+
+export const syncTrendingCoins = async (trendingData: any) => {
+    const coins = trendingData.coins;
+    if (!coins || coins.length === 0) return;
+
+    const client = await pool.connect();
+
+    try {
+        await client.query("BEGIN");
+        await client.query("DELETE FROM trending_coins");
+
+        const values = [];
+        const params = [];
+        let paramIndex = 1;
+        let trendRank = 1;
+
+        for (const coinObj of coins) {
+            const item = coinObj.item;
+            values.push(`($${paramIndex++}, $${paramIndex++}, $${paramIndex++}, NOW())`);
+            params.push(item.id, trendRank++, item.score || 0);
+        }
+
+        const insertTrendingQuery = `
+            INSERT INTO trending_coins (coin_id, trend_rank, score, last_synced_at)
+            VALUES ${values.join(", ")}
+        `;
+
+        await client.query(insertTrendingQuery, params);
+        await client.query("COMMIT");
+    } catch (e) {
+        await client.query("ROLLBACK");
+        throw e;
+    } finally {
+        client.release();
+    }
+};
