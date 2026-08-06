@@ -153,42 +153,42 @@ const setupJobs = async () => {
   await marketQueue.upsertJobScheduler(
     "scheduler-top250",
     { every: 150000 },
-    { name: "sync-top250" },
+    { name: "sync-top250", opts: { removeOnComplete: true, removeOnFail: true } },
   );
   await marketQueue.upsertJobScheduler(
     "scheduler-251-500",
     { pattern: "*/5 * * * *" },
-    { name: "sync-251-500" },
+    { name: "sync-251-500", opts: { removeOnComplete: true, removeOnFail: true } },
   );
   await marketQueue.upsertJobScheduler(
     "scheduler-501-2000",
     { pattern: "*/15 * * * *" },
-    { name: "sync-501-2000" },
+    { name: "sync-501-2000", opts: { removeOnComplete: true, removeOnFail: true } },
   );
   await marketQueue.upsertJobScheduler(
     "scheduler-2001-5000",
     { pattern: "0 * * * *" },
-    { name: "sync-2001-5000" },
+    { name: "sync-2001-5000", opts: { removeOnComplete: true, removeOnFail: true } },
   );
   await marketQueue.upsertJobScheduler(
     "scheduler-5001-plus",
     { pattern: "0 */3 * * *" },
-    { name: "sync-5001-plus" },
+    { name: "sync-5001-plus", opts: { removeOnComplete: true, removeOnFail: true } },
   );
   await marketQueue.upsertJobScheduler(
     "scheduler-global-trending",
     { pattern: "*/30 * * * *" },
-    { name: "sync-global-trending" },
+    { name: "sync-global-trending", opts: { removeOnComplete: true, removeOnFail: true } },
   );
   await marketQueue.upsertJobScheduler(
     "scheduler-top100-details",
     { pattern: "0 0 * * *" },
-    { name: "sync-top100-details" },
+    { name: "sync-top100-details", opts: { removeOnComplete: true, removeOnFail: true } },
   );
   await marketQueue.upsertJobScheduler(
     "scheduler-remaining-details",
     { pattern: "0 0 * * *" },
-    { name: "sync-remaining-details" },
+    { name: "sync-remaining-details", opts: { removeOnComplete: true, removeOnFail: true } },
   );
 
   console.log("Scheduler setup complete.");
