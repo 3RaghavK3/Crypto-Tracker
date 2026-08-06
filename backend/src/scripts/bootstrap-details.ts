@@ -17,7 +17,7 @@ const bootstrap = async () => {
 
         console.log(`Found ${top100.length} coins. Fetching metadata for each...`);
         for (let i = 0; i < top100.length; i++) {
-            const coinId = top100[i].coin_id; // the db column is coin_id
+            const coinId = top100[i].coin_id; 
             try {
                 console.log(`Fetching metadata for ${coinId} (${i + 1}/${top100.length})...`);
                 const detail = await coinsService.getCoinDetail(coinId);

@@ -1,11 +1,33 @@
 import * as coinsRepository from "../05-repository/coins.repository.js";
 import * as coingeckoService from "./coingecko.service.js";
+import redisClient from "../config/redis.js";
+import { REDIS_KEYS, getMarketPageTTL, getCoinDetailsTTL, getGlobalTrendingTTL } from "../utils/redisKeys.js";
 
 export const getMarketsFromDb = async (page: number, perPage: number, orderBy: string) => {
-    return await coinsRepository.getMarketsFromDb(page, perPage, orderBy);
+    const cacheKey = REDIS_KEYS.MARKET_PAGE(page);
+    const cachedData = await redisClient.get(cacheKey);
+    
+    if (cachedData) {
+        return JSON.parse(cachedData);
+    }
+
+    const data = await coinsRepository.getMarketsFromDb(page, perPage, orderBy);
+    
+    if (data) {
+        await redisClient.setex(cacheKey, getMarketPageTTL(page), JSON.stringify(data));
+    }
+
+    return data;
 };
 
 export const getCoinDetailFromDb = async (coinId: string) => {
+    const cacheKey = REDIS_KEYS.COIN_DETAILS(coinId);
+    const cachedData = await redisClient.get(cacheKey);
+    
+    if (cachedData) {
+        return JSON.parse(cachedData);
+    }
+
     let dbData = await coinsRepository.getCoinDetailFromDb(coinId);
 
     if (dbData && dbData.detail_last_synced_at == null) {
@@ -37,13 +59,43 @@ export const getCoinDetailFromDb = async (coinId: string) => {
         }
     }
 
+    if (dbData) {
+        await redisClient.setex(cacheKey, getCoinDetailsTTL(), JSON.stringify(dbData));
+    }
+
     return dbData;
 };
 
 export const getGlobalDataFromDb = async () => {
-    return await coinsRepository.getGlobalDataFromDb();
+    const cacheKey = REDIS_KEYS.GLOBAL_DATA;
+    const cachedData = await redisClient.get(cacheKey);
+
+    if (cachedData) {
+        return JSON.parse(cachedData);
+    }
+
+    const data = await coinsRepository.getGlobalDataFromDb();
+
+    if (data) {
+        await redisClient.setex(cacheKey, getGlobalTrendingTTL(), JSON.stringify(data));
+    }
+
+    return data;
 };
 
 export const getTrendingCoinsFromDb = async () => {
-    return await coinsRepository.getTrendingCoinsFromDb();
+    const cacheKey = REDIS_KEYS.TRENDING_COINS;
+    const cachedData = await redisClient.get(cacheKey);
+
+    if (cachedData) {
+        return JSON.parse(cachedData);
+    }
+
+    const data = await coinsRepository.getTrendingCoinsFromDb();
+
+    if (data) {
+        await redisClient.setex(cacheKey, getGlobalTrendingTTL(), JSON.stringify(data));
+    }
+
+    return data;
 };
