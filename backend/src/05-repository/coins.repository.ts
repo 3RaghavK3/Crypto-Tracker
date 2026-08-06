@@ -1,51 +1,58 @@
-import { coinGeckoApi } from "../config/coingecko.js";
+
 import pool from "../config/db.js";
 
-export const getMarkets = async (
-    vsCurrency: string,
-    order: string,
-    perPage: number,
-    page: number,
-    sparkline: boolean,
-    priceChangePercentage: string
-) => {
-    const response = await coinGeckoApi.get("/coins/markets", {
-        params: {
-            vs_currency: vsCurrency,
-            order,
-            per_page: perPage,
-            page,
-            sparkline,
-            price_change_percentage: priceChangePercentage,
-        },
-    });
+export const getMarketsFromDb = async (page: number, perPage: number, orderBy: string) => {
+    let orderClause = "market_cap DESC NULLS LAST";
+    
+    switch (orderBy) {
+        case "market_cap_asc":
+            orderClause = "market_cap ASC NULLS LAST";
+            break;
+        case "market_cap_desc":
+            orderClause = "market_cap DESC NULLS LAST";
+            break;
+        case "volume_asc":
+            orderClause = "total_volume ASC NULLS LAST";
+            break;
+        case "volume_desc":
+            orderClause = "total_volume DESC NULLS LAST";
+            break;
+        case "id_asc":
+            orderClause = "coin_id ASC";
+            break;
+        case "id_desc":
+            orderClause = "coin_id DESC";
+            break;
+    }
 
-    return response.data;
+    const offset = (page - 1) * perPage;
+    
+    const query = `
+        SELECT * FROM coins 
+        ORDER BY ${orderClause}
+        LIMIT $1 OFFSET $2
+    `;
+    
+    const result = await pool.query(query, [perPage, offset]);
+    return result.rows;
 };
 
-export const getCoinDetail = async (coinId: string) => {
-    const response = await coinGeckoApi.get(`/coins/${coinId}`);
-    return response.data;
+export const getGlobalDataFromDb = async () => {
+    const query = `SELECT * FROM global_market_stats`;
+    const result = await pool.query(query);
+    return result.rows[0] || null;
 };
 
-export const getGlobalData = async () => {
-    const response = await coinGeckoApi.get("/global");
-    return response.data;
+export const getTrendingCoinsFromDb = async () => {
+    const query = `SELECT * FROM trending_coins ORDER BY trend_rank ASC`;
+    const result = await pool.query(query);
+    return result.rows;
 };
 
-export const getTrendingCoins = async () => {
-    const response = await coinGeckoApi.get("/search/trending");
-    return response.data;
-};
-
-export const search = async (query: string) => {
-    const response = await coinGeckoApi.get("/search", {
-        params: {
-            query,
-        },
-    });
-
-    return response.data;
+export const getCoinDetailFromDb = async (coinId: string) => {
+    const query = `SELECT * FROM coins WHERE coin_id = $1`;
+    const result = await pool.query(query, [coinId]);
+    return result.rows[0] || null;
 };
 
 export const bulkUpsertCoins = async (coins: any[]) => {

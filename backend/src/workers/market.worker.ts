@@ -1,18 +1,17 @@
 import { Worker } from "bullmq";
 import { connection, marketQueue } from "../config/bullmq.js";
-import * as coinsService from "../04-services/coins.service.js";
+import * as coingeckoService from "../04-services/coingecko.service.js";
 import { bulkUpsertCoins, upsertGlobalData, syncTrendingCoins } from "../05-repository/coins.repository.js";
-import pool from "../config/db.js";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 async function syncPages(startPage: number, endPage: number) {
     let page = startPage;
-    
+
     while (page <= endPage) {
         try {
             console.log(`Fetching page ${page}...`);
-            const coins = await coinsService.getMarkets(
+            const coins = await coingeckoService.getMarkets(
                 "usd",
                 "market_cap_desc",
                 250,
@@ -28,15 +27,12 @@ async function syncPages(startPage: number, endPage: number) {
 
             console.log(`Fetched ${coins.length} coins on page ${page}. Upserting...`);
             await bulkUpsertCoins(coins);
-            
-            if (coins.length < 250 && endPage === Infinity) {
-                console.log(`Page ${page} returned fewer than 250 coins. Terminating loop.`);
-                break;
-            }
-            
+
+
+
             page++;
             if (page <= endPage) {
-                await delay(1000); // 1 second delay between requests
+                await delay(1000);
             }
         } catch (error: any) {
             console.error(`Error fetching page ${page}:`, error.message);
@@ -54,7 +50,7 @@ const worker = new Worker(
     "market-sync",
     async (job) => {
         console.log(`Processing job ${job.name} (ID: ${job.id})`);
-        
+
         switch (job.name) {
             case "sync-top250":
                 await syncPages(1, 1);
@@ -71,17 +67,8 @@ const worker = new Worker(
             case "sync-5001-plus":
                 await syncPages(21, Infinity);
                 break;
-            case "sync-global":
-                console.log("Fetching global market stats...");
-                const globalData = await coinsService.getGlobalData();
-                await upsertGlobalData(globalData);
-                console.log("Global market stats synchronized.");
-                break;
-            case "sync-trending":
-                console.log("Fetching trending coins...");
-                const trendingData = await coinsService.getTrendingCoins();
-                await syncTrendingCoins(trendingData);
-                console.log("Trending coins synchronized.");
+            case "sync-global-trending":
+                await syncGlobalAndTrending();
                 break;
             default:
                 console.warn(`Unknown job name: ${job.name}`);
@@ -98,6 +85,22 @@ worker.on("failed", (job, err) => {
     console.error(`Job ${job?.name} failed with error:`, err);
 });
 
+async function syncGlobalAndTrending() {
+    try {
+        console.log("Syncing global data...");
+        const globalData = await coingeckoService.getGlobalData();
+        await upsertGlobalData(globalData);
+        console.log("Global data synced successfully.");
+        
+        console.log("Syncing trending coins...");
+        const trendingData = await coingeckoService.getTrendingCoins();
+        await syncTrendingCoins(trendingData);
+        console.log("Trending coins synced successfully.");
+    } catch (error: any) {
+        console.error("Error syncing global or trending data:", error.message);
+    }
+}
+
 const setupJobs = async () => {
     console.log("Clearing old job schedulers...");
     const schedulers = await marketQueue.getJobSchedulers();
@@ -106,14 +109,18 @@ const setupJobs = async () => {
     }
 
     console.log("Adding repeatable jobs...");
+
     await marketQueue.upsertJobScheduler("scheduler-top250", { pattern: "* * * * *" }, { name: "sync-top250" });
     await marketQueue.upsertJobScheduler("scheduler-251-500", { pattern: "*/5 * * * *" }, { name: "sync-251-500" });
     await marketQueue.upsertJobScheduler("scheduler-501-2000", { pattern: "*/15 * * * *" }, { name: "sync-501-2000" });
     await marketQueue.upsertJobScheduler("scheduler-2001-5000", { pattern: "0 * * * *" }, { name: "sync-2001-5000" });
     await marketQueue.upsertJobScheduler("scheduler-5001-plus", { pattern: "0 */6 * * *" }, { name: "sync-5001-plus" });
-    await marketQueue.upsertJobScheduler("scheduler-global", { pattern: "*/30 * * * *" }, { name: "sync-global" });
-    await marketQueue.upsertJobScheduler("scheduler-trending", { pattern: "*/30 * * * *" }, { name: "sync-trending" });
+    await marketQueue.upsertJobScheduler("scheduler-global-trending", { pattern: "*/30 * * * *" }, { name: "sync-global-trending" });
+
     console.log("Scheduler setup complete.");
+
+    console.log("Adding initial sync for global and trending data to queue...");
+    await marketQueue.add("sync-global-trending", {}, { removeOnComplete: true, removeOnFail: true });
 };
 
 setupJobs().catch(console.error);

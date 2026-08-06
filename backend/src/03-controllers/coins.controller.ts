@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import * as coinsService from "../04-services/coins.service.js";
+import * as coingeckoService from "../04-services/coingecko.service.js";
 import { GetMarketsInput, GetCoinDetailInput, SearchInput } from "../06-validations/coin.validation.js";
 
 export const getMarkets = async (
@@ -9,21 +10,15 @@ export const getMarkets = async (
 ) => {
     try {
         const {
-            vs_currency,
             order,
             per_page,
             page,
-            sparkline,
-            price_change_percentage
         } = req.query as unknown as GetMarketsInput;
 
-        const result = await coinsService.getMarkets(
-            vs_currency,
-            order,
-            per_page,
+        const result = await coinsService.getMarketsFromDb(
             page,
-            sparkline,
-            price_change_percentage
+            per_page,
+            order
         );
 
         res.status(200).json(result);
@@ -39,7 +34,7 @@ export const getCoinDetail = async (
 ) => {
     try {
         const { coinId } = req.params as unknown as GetCoinDetailInput;
-        const result = await coinsService.getCoinDetail(coinId);
+        const result = await coinsService.getCoinDetailFromDb(coinId);
         res.status(200).json(result);
     } catch (error) {
         next(error);
@@ -52,7 +47,7 @@ export const getGlobalData = async (
     next: NextFunction
 ) => {
     try {
-        const result = await coinsService.getGlobalData();
+        const result = await coinsService.getGlobalDataFromDb();
         res.status(200).json(result);
     } catch (error) {
         next(error);
@@ -65,7 +60,7 @@ export const getTrendingCoins = async (
     next: NextFunction
 ) => {
     try {
-        const result = await coinsService.getTrendingCoins();
+        const result = await coinsService.getTrendingCoinsFromDb();
         res.status(200).json(result);
     } catch (error) {
         next(error);
@@ -79,7 +74,7 @@ export const search = async (
 ) => {
     try {
         const { query } = req.query as unknown as SearchInput;
-        const result = await coinsService.search(query);
+        const result = await coingeckoService.search(query);
         res.status(200).json(result);
     } catch (error) {
         next(error);

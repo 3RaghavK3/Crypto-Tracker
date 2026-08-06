@@ -1,35 +1,17 @@
 import * as coinsRepository from "../05-repository/coins.repository.js";
 
-export const getMarkets = async (
-    vsCurrency: string,
-    order: string,
-    perPage: number,
-    page: number,
-    sparkline: boolean,
-    priceChangePercentage: string
-) => {
-    return await coinsRepository.getMarkets(
-        vsCurrency,
-        order,
-        perPage,
-        page,
-        sparkline,
-        priceChangePercentage
-    );
+export const getMarketsFromDb = async (page: number, perPage: number, orderBy: string) => {
+    return await coinsRepository.getMarketsFromDb(page, perPage, orderBy);
 };
 
-export const getCoinDetail = async (coinId: string) => {
-    return await coinsRepository.getCoinDetail(coinId);
+export const getCoinDetailFromDb = async (coinId: string) => {
+    return await coinsRepository.getCoinDetailFromDb(coinId);
 };
 
-export const getGlobalData = async () => {
-    return await coinsRepository.getGlobalData();
+export const getGlobalDataFromDb = async () => {
+    return await coinsRepository.getGlobalDataFromDb();
 };
 
-export const getTrendingCoins = async () => {
-    return await coinsRepository.getTrendingCoins();
-};
-
-export const search = async (query: string) => {
-    return await coinsRepository.search(query);
+export const getTrendingCoinsFromDb = async () => {
+    return await coinsRepository.getTrendingCoinsFromDb();
 };
