@@ -3,7 +3,7 @@ import pool from "../config/db.js";
 
 export const getMarketsFromDb = async (page: number, perPage: number, orderBy: string) => {
     let orderClause = "market_cap DESC NULLS LAST";
-    
+
     switch (orderBy) {
         case "market_cap_asc":
             orderClause = "market_cap ASC NULLS LAST";
@@ -26,13 +26,13 @@ export const getMarketsFromDb = async (page: number, perPage: number, orderBy: s
     }
 
     const offset = (page - 1) * perPage;
-    
+
     const query = `
         SELECT * FROM coins 
         ORDER BY ${orderClause}
         LIMIT $1 OFFSET $2
     `;
-    
+
     const result = await pool.query(query, [perPage, offset]);
     return result.rows;
 };
@@ -51,16 +51,34 @@ export const getTrendingCoinsFromDb = async () => {
 
 export const getCoinDetailFromDb = async (coinId: string) => {
     const query = `
-        SELECT c.*, cd.*
-        FROM coins c
-        LEFT JOIN coin_detail cd ON c.coin_id = cd.coin_id
-        WHERE c.coin_id = $1
+        SELECT
+        c.*,
+        cd.description,
+        cd.categories,
+        cd.homepage,
+        cd.whitepaper,
+        cd.twitter_username,
+        cd.subreddit_url,
+        cd.github_repositories,
+        cd.platforms,
+        cd.sentiment_votes_up_percentage,
+        cd.sentiment_votes_down_percentage,
+        cd.watchlist_portfolio_users,
+        cd.developer_data,
+        cd.community_data,
+        cd.coingecko_last_updated AS detail_coingecko_last_updated,
+        cd.last_synced_at AS detail_last_synced_at,
+        cd.coin_id AS has_detail
+    FROM coins c
+    LEFT JOIN coin_detail cd
+        ON c.coin_id = cd.coin_id
+    WHERE c.coin_id = $1;
     `;
     const result = await pool.query(query, [coinId]);
     return result.rows[0] || null;
 };
 
-export const bulkUpsertCoins = async (coins: any[]) => {
+export const upsertMarketData = async (coins: any[]) => {
     if (coins.length === 0) return;
 
     const values = [];
@@ -159,7 +177,7 @@ export const bulkUpsertCoins = async (coins: any[]) => {
     await pool.query(query, params);
 };
 
-export const upsertGlobalData = async (globalData: any) => {
+export const upsertGlobal = async (globalData: any) => {
     const data = globalData.data;
     if (!data) return;
 
@@ -195,7 +213,7 @@ export const upsertGlobalData = async (globalData: any) => {
     }
 };
 
-export const syncTrendingCoins = async (trendingData: any) => {
+export const upsertTrending = async (trendingData: any) => {
     const coins = trendingData.coins;
     if (!coins || coins.length === 0) return;
 
@@ -231,39 +249,25 @@ export const syncTrendingCoins = async (trendingData: any) => {
     }
 };
 
-export const upsertCoinDetail = async (coinId: string, data: any) => {
+export const upsertDetail = async (coinId: string, data: any) => {
     const query = `
         INSERT INTO coin_detail (
-            coin_id, description, categories, hashing_algorithm, block_time_in_minutes,
-            genesis_date, country_origin, homepage, blockchain_sites, official_forum_urls,
-            chat_urls, announcement_urls, whitepaper, twitter_username, facebook_username,
-            telegram_channel_identifier, subreddit_url, github_repositories, bitbucket_repositories,
-            platforms, detail_platforms, sentiment_votes_up_percentage, sentiment_votes_down_percentage,
-            watchlist_portfolio_users, developer_data, community_data, coingecko_last_updated, last_synced_at
+            coin_id, description, categories, homepage, whitepaper, twitter_username,
+            subreddit_url, github_repositories, platforms, sentiment_votes_up_percentage, 
+            sentiment_votes_down_percentage, watchlist_portfolio_users, developer_data, 
+            community_data, coingecko_last_updated, last_synced_at
         ) VALUES (
-            $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, NOW()
+            $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, NOW()
         )
         ON CONFLICT (coin_id) DO UPDATE SET
             description = EXCLUDED.description,
             categories = EXCLUDED.categories,
-            hashing_algorithm = EXCLUDED.hashing_algorithm,
-            block_time_in_minutes = EXCLUDED.block_time_in_minutes,
-            genesis_date = EXCLUDED.genesis_date,
-            country_origin = EXCLUDED.country_origin,
             homepage = EXCLUDED.homepage,
-            blockchain_sites = EXCLUDED.blockchain_sites,
-            official_forum_urls = EXCLUDED.official_forum_urls,
-            chat_urls = EXCLUDED.chat_urls,
-            announcement_urls = EXCLUDED.announcement_urls,
             whitepaper = EXCLUDED.whitepaper,
             twitter_username = EXCLUDED.twitter_username,
-            facebook_username = EXCLUDED.facebook_username,
-            telegram_channel_identifier = EXCLUDED.telegram_channel_identifier,
             subreddit_url = EXCLUDED.subreddit_url,
             github_repositories = EXCLUDED.github_repositories,
-            bitbucket_repositories = EXCLUDED.bitbucket_repositories,
             platforms = EXCLUDED.platforms,
-            detail_platforms = EXCLUDED.detail_platforms,
             sentiment_votes_up_percentage = EXCLUDED.sentiment_votes_up_percentage,
             sentiment_votes_down_percentage = EXCLUDED.sentiment_votes_down_percentage,
             watchlist_portfolio_users = EXCLUDED.watchlist_portfolio_users,
@@ -277,24 +281,12 @@ export const upsertCoinDetail = async (coinId: string, data: any) => {
         coinId,
         data.description?.en || null,
         data.categories || [],
-        data.hashing_algorithm,
-        data.block_time_in_minutes,
-        data.genesis_date,
-        data.country_origin,
         data.links?.homepage || [],
-        data.links?.blockchain_site || [],
-        data.links?.official_forum_url || [],
-        data.links?.chat_url || [],
-        data.links?.announcement_url || [],
         data.links?.whitepaper || null,
         data.links?.twitter_screen_name || null,
-        data.links?.facebook_username || null,
-        data.links?.telegram_channel_identifier || null,
         data.links?.subreddit_url || null,
         data.links?.repos_url?.github || [],
-        data.links?.repos_url?.bitbucket || [],
         data.platforms ? JSON.stringify(data.platforms) : null,
-        data.detail_platforms ? JSON.stringify(data.detail_platforms) : null,
         data.sentiment_votes_up_percentage,
         data.sentiment_votes_down_percentage,
         data.watchlist_portfolio_users,
@@ -304,4 +296,32 @@ export const upsertCoinDetail = async (coinId: string, data: any) => {
     ];
 
     await pool.query(query, params);
+};
+
+export const getTop100Ids = async () => {
+    const query = `
+        SELECT cd.coin_id
+        FROM coin_detail cd
+        JOIN coins c
+            ON cd.coin_id = c.coin_id
+        WHERE c.market_cap_rank <= 100
+    `;
+    const result = await pool.query(query);
+    return result.rows.map(row => row.coin_id);
+};
+
+export const getRemainingIds = async () => {
+    const query = `
+        SELECT coin_id
+        FROM coin_detail
+        WHERE coin_id NOT IN (
+            SELECT coin_id
+            FROM coins
+            WHERE market_cap_rank <= 100
+        )
+        ORDER BY last_synced_at ASC
+        LIMIT 100
+    `;
+    const result = await pool.query(query);
+    return result.rows.map(row => row.coin_id);
 };

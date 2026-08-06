@@ -1,5 +1,5 @@
 import * as coinsService from "../04-services/coingecko.service.js";
-import { bulkUpsertCoins } from "../05-repository/coins.repository.js";
+import { upsertMarketData } from "../05-repository/coins.repository.js";
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -28,7 +28,7 @@ const bootstrap = async () => {
             }
 
             console.log(`Fetched ${coins.length} coins. Upserting into database...`);
-            await bulkUpsertCoins(coins);
+            await upsertMarketData(coins);
 
             console.log(`Page ${page} successfully upserted.`);
             page++;

@@ -1,5 +1,5 @@
 import * as coinsService from "../04-services/coingecko.service.js";
-import { upsertCoinDetail, getMarketsFromDb } from "../05-repository/coins.repository.js";
+import { upsertDetail, getMarketsFromDb } from "../05-repository/coins.repository.js";
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -21,7 +21,7 @@ const bootstrap = async () => {
             try {
                 console.log(`Fetching metadata for ${coinId} (${i + 1}/${top100.length})...`);
                 const detail = await coinsService.getCoinDetail(coinId);
-                await upsertCoinDetail(coinId, detail);
+                await upsertDetail(coinId, detail);
                 await delay(2500); 
             } catch (err: any) {
                 console.error(`Rate limited (429) or error for ${coinId}: ${err.message}`);

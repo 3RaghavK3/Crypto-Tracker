@@ -1,11 +1,11 @@
 import { Worker } from "bullmq";
 import { connection, marketQueue } from "../config/bullmq.js";
 import * as coingeckoService from "../04-services/coingecko.service.js";
-import { bulkUpsertCoins, upsertGlobalData, syncTrendingCoins } from "../05-repository/coins.repository.js";
+import { upsertMarketData, upsertGlobal, upsertTrending, getTop100Ids, getRemainingIds, upsertDetail } from "../05-repository/coins.repository.js";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-async function syncPages(startPage: number, endPage: number) {
+async function upsertPages(startPage: number, endPage: number) {
     let page = startPage;
 
     while (page <= endPage) {
@@ -26,7 +26,7 @@ async function syncPages(startPage: number, endPage: number) {
             }
 
             console.log(`Fetched ${coins.length} coins on page ${page}. Upserting...`);
-            await bulkUpsertCoins(coins);
+            await upsertMarketData(coins);
 
 
 
@@ -46,6 +46,31 @@ async function syncPages(startPage: number, endPage: number) {
     }
 }
 
+async function upsertDetails(coinIds: string[]) {
+    console.log(`Syncing metadata for ${coinIds.length} coins...`);
+    for (let i = 0; i < coinIds.length; i++) {
+        const coinId = coinIds[i];
+        try {
+            console.log(`Fetching metadata for ${coinId} (${i + 1}/${coinIds.length})...`);
+            const apiData = await coingeckoService.getCoinDetail(coinId);
+            await upsertDetail(coinId, apiData);
+            
+            // CoinGecko /coins/{id} endpoint is very strict (often 10-30 req/min)
+            // Wait 2 seconds between successful calls to avoid 429
+            if (i < coinIds.length - 1) {
+                await delay(2000);
+            }
+        } catch (error: any) {
+            console.error(`Error fetching metadata for ${coinId}:`, error.message);
+            if (error.response?.status === 429) {
+                console.log("Rate limited! Cooldown for 60 seconds...");
+                await delay(60000);
+                i--; // Retry the same coin after cooldown
+            }
+        }
+    }
+}
+
 const worker = new Worker(
     "market-sync",
     async (job) => {
@@ -53,23 +78,33 @@ const worker = new Worker(
 
         switch (job.name) {
             case "sync-top250":
-                await syncPages(1, 1);
+                await upsertPages(1, 1);
                 break;
             case "sync-251-500":
-                await syncPages(2, 2);
+                await upsertPages(2, 2);
                 break;
             case "sync-501-2000":
-                await syncPages(3, 8);
+                await upsertPages(3, 8);
                 break;
             case "sync-2001-5000":
-                await syncPages(9, 20);
+                await upsertPages(9, 20);
                 break;
             case "sync-5001-plus":
-                await syncPages(21, Infinity);
+                await upsertPages(21, Infinity);
                 break;
             case "sync-global-trending":
-                await syncGlobalAndTrending();
+                await upsertGlobalAndTrending();
                 break;
+            case "sync-top100-details": {
+                const top100 = await getTop100Ids();
+                await upsertDetails(top100);
+                break;
+            }
+            case "sync-remaining-details": {
+                const remaining = await getRemainingIds();
+                await upsertDetails(remaining);
+                break;
+            }
             default:
                 console.warn(`Unknown job name: ${job.name}`);
         }
@@ -85,16 +120,16 @@ worker.on("failed", (job, err) => {
     console.error(`Job ${job?.name} failed with error:`, err);
 });
 
-async function syncGlobalAndTrending() {
+async function upsertGlobalAndTrending() {
     try {
         console.log("Syncing global data...");
         const globalData = await coingeckoService.getGlobalData();
-        await upsertGlobalData(globalData);
+        await upsertGlobal(globalData);
         console.log("Global data synced successfully.");
         
         console.log("Syncing trending coins...");
         const trendingData = await coingeckoService.getTrendingCoins();
-        await syncTrendingCoins(trendingData);
+        await upsertTrending(trendingData);
         console.log("Trending coins synced successfully.");
     } catch (error: any) {
         console.error("Error syncing global or trending data:", error.message);
@@ -116,6 +151,8 @@ const setupJobs = async () => {
     await marketQueue.upsertJobScheduler("scheduler-2001-5000", { pattern: "0 * * * *" }, { name: "sync-2001-5000" });
     await marketQueue.upsertJobScheduler("scheduler-5001-plus", { pattern: "0 */3 * * *" }, { name: "sync-5001-plus" });
     await marketQueue.upsertJobScheduler("scheduler-global-trending", { pattern: "*/30 * * * *" }, { name: "sync-global-trending" });
+    await marketQueue.upsertJobScheduler("scheduler-top100-details", { pattern: "0 0 * * *" }, { name: "sync-top100-details" });
+    await marketQueue.upsertJobScheduler("scheduler-remaining-details", { pattern: "0 0 * * *" }, { name: "sync-remaining-details" });
 
     console.log("Scheduler setup complete.");
 
