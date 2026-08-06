@@ -7,7 +7,7 @@ export const getMarketsFromDb = async (page: number, perPage: number, orderBy: s
 
 export const getCoinDetailFromDb = async (coinId: string) => {
     let dbData = await coinsRepository.getCoinDetailFromDb(coinId);
-    // O(1) check if the left join found a matching row in coin_detail
+
     if (dbData && dbData.detail_last_synced_at == null) {
         try {
             const apiData = await coingeckoService.getCoinDetail(coinId);
