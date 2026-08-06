@@ -17,7 +17,7 @@ async function syncPages(startPage: number, endPage: number) {
                 250,
                 page,
                 true,
-                "1h,24h,7d"
+                "1h,24h,7d,14d,30d,200d,1y"
             );
 
             if (!coins || coins.length === 0) {
@@ -110,11 +110,11 @@ const setupJobs = async () => {
 
     console.log("Adding repeatable jobs...");
 
-    await marketQueue.upsertJobScheduler("scheduler-top250", { pattern: "* * * * *" }, { name: "sync-top250" });
+    await marketQueue.upsertJobScheduler("scheduler-top250", { every: 150000 }, { name: "sync-top250" });
     await marketQueue.upsertJobScheduler("scheduler-251-500", { pattern: "*/5 * * * *" }, { name: "sync-251-500" });
     await marketQueue.upsertJobScheduler("scheduler-501-2000", { pattern: "*/15 * * * *" }, { name: "sync-501-2000" });
     await marketQueue.upsertJobScheduler("scheduler-2001-5000", { pattern: "0 * * * *" }, { name: "sync-2001-5000" });
-    await marketQueue.upsertJobScheduler("scheduler-5001-plus", { pattern: "0 */6 * * *" }, { name: "sync-5001-plus" });
+    await marketQueue.upsertJobScheduler("scheduler-5001-plus", { pattern: "0 */3 * * *" }, { name: "sync-5001-plus" });
     await marketQueue.upsertJobScheduler("scheduler-global-trending", { pattern: "*/30 * * * *" }, { name: "sync-global-trending" });
 
     console.log("Scheduler setup complete.");

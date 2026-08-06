@@ -11,7 +11,8 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "start:worker": "node dist/workers/market.worker.js",
-    "bootstrap:coins": "tsx src/scripts/bootstrap-coins.ts"
+    "bootstrap:markets": "tsx src/scripts/bootstrap-markets.ts",
+    "bootstrap:details": "tsx src/scripts/bootstrap-details.ts"
   },
   "keywords": [],
   "author": "",

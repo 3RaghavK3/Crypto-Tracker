@@ -7,7 +7,7 @@ const bootstrap = async () => {
     let page = 1;
     let hasMore = true;
 
-    console.log("Starting CoinGecko bootstrap process...");
+    console.log("Starting CoinGecko markets bootstrap process (CX_1)...");
 
     while (hasMore) {
         try {
@@ -18,11 +18,11 @@ const bootstrap = async () => {
                 250,
                 page,
                 true,
-                "1h,24h,7d"
+                "1h,24h,7d,14d,30d,200d,1y"
             );
 
             if (!coins || coins.length === 0) {
-                console.log("Empty page returned. Bootstrap complete!");
+                console.log("Empty page returned. Market bootstrap complete!");
                 hasMore = false;
                 break;
             }
@@ -33,16 +33,15 @@ const bootstrap = async () => {
             console.log(`Page ${page} successfully upserted.`);
             page++;
 
-            // Wait 1000ms to stay within 100 requests / minute rate limit
             await delay(1000);
-        } catch (error) {
-            console.error(`Error fetching or upserting page ${page}:`, error);
-            // Wait longer before retrying on error
-            await delay(5000);
+        } catch (error: any) {
+            console.error(`Rate limited (429) or error on page ${page}: ${error.message}`);
+            console.log("Waiting 60 seconds for API cooldown...");
+            await delay(60000);
         }
     }
 
-    console.log("Bootstrap process finished successfully.");
+    console.log("Market bootstrap process finished successfully.");
     process.exit(0);
 };
 
