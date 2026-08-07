@@ -4,7 +4,8 @@ import { authenticate } from "../02-middleware/authenticate.js";
 import validate from "../02-middleware/validation.js";
 import {
   addAlertSchema,
-  updateAlertSchema,
+  alertParamsSchema,
+  updateAlertBodySchema,
   deleteAlertSchema,
 } from "../06-validations/alerts.validation.js";
 
@@ -16,8 +17,17 @@ router.get("/", alertController.getAlerts);
 
 router.post("/", validate(addAlertSchema), alertController.addAlert);
 
-router.patch("/", validate(updateAlertSchema), alertController.updateAlert);
+router.patch(
+  "/:coin_id/:type",
+  validate(alertParamsSchema, "params"),
+  validate(updateAlertBodySchema, "body"),
+  alertController.updateAlert
+);
 
-router.delete("/", validate(deleteAlertSchema), alertController.deleteAlert);
+router.delete(
+  "/:coin_id/:type",
+  validate(deleteAlertSchema, "params"),
+  alertController.deleteAlert
+);
 
 export default router;

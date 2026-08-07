@@ -54,8 +54,9 @@ export const updateAlert = async (
     if (!userId) {
       return next(new AppError(401, "Unauthorized"));
     }
-    const { coin_id, type, price } = req.body;
-    const isUpdated = await alertService.updateAlert(userId, coin_id, type, price);
+    const { coin_id, type } = req.params;
+    const { price } = req.body;
+    const isUpdated = await alertService.updateAlert(userId, coin_id as string, type as string, price);
 
     if (!isUpdated) {
       return next(new AppError(404, "Alert not found"));
@@ -77,8 +78,8 @@ export const deleteAlert = async (
     if (!userId) {
       return next(new AppError(401, "Unauthorized"));
     }
-    const { coin_id, type } = req.body;
-    const isDeleted = await alertService.deleteAlert(userId, coin_id, type);
+    const { coin_id, type } = req.params;
+    const isDeleted = await alertService.deleteAlert(userId, coin_id as string, type as string);
 
     if (!isDeleted) {
       return next(new AppError(404, "Alert not found"));
