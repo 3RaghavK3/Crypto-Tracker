@@ -68,13 +68,19 @@ export const processSatisfiedAlerts = async () => {
         (a.type = 'PRICE_BELOW' AND c.current_price <= a.price)
     `);
 
+    const insertedNotifications = [];
+
     for (const alert of alerts) {
-      await client.query(
+      const res = await client.query(
         `INSERT INTO notifications
          (user_id, coin_id, notification_type, status, created_at)
-         VALUES ($1, $2, $3, 'PENDING', NOW())`,
+         VALUES ($1, $2, $3, 'PENDING', NOW())
+         RETURNING *`,
         [alert.user_id, alert.coin_id, alert.type]
       );
+      if (res.rows.length > 0) {
+        insertedNotifications.push(res.rows[0]);
+      }
     }
 
     for (const alert of alerts) {
@@ -88,11 +94,20 @@ export const processSatisfiedAlerts = async () => {
     }
 
     await client.query("COMMIT");
-    return alerts;
+    return insertedNotifications;
   } catch (err) {
     await client.query("ROLLBACK");
     throw err;
   } finally {
     client.release();
   }
+};
+
+export const updateNotificationStatus = async (notificationId: number, status: string) => {
+  const query = `
+    UPDATE notifications
+    SET status = $2
+    WHERE notification_id = $1
+  `;
+  await pool.query(query, [notificationId, status]);
 };

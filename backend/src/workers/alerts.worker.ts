@@ -1,6 +1,8 @@
 import { Worker } from "bullmq";
 import { connection, alertQueue } from "../config/bullmq.js";
 import * as alertRepo from "../05-repository/alerts.repository.js";
+import * as authRepo from "../05-repository/auth.repository.js";
+import transporter from "../config/email.js";
 
 const worker = new Worker(
   "alert-sync",
@@ -11,15 +13,37 @@ const worker = new Worker(
       try {
         const notifications = await alertRepo.processSatisfiedAlerts();
         console.log(`Processed alerts. Created ${notifications.length} pending notifications.`);
-        
-        // At this point, the alerts worker could either process emails right away 
-        // OR a separate email worker could pick up PENDING notifications.
-        // As per the user's instructions: "then it alert worker job to send email thing from the notifcation table"
-        // We will do a simple pass over pending notifications here if needed in the future,
-        // but for now we just acknowledge they are created.
+
         if (notifications.length > 0) {
-          console.log("Here we would trigger email dispatching for:", notifications);
-          // TODO: Fetch user email from user_id, send email using nodemailer, and update status to 'SENT'
+          console.log(`Triggering email dispatch for ${notifications.length} notifications...`);
+
+          for (const notif of notifications) {
+            try {
+              const user = await authRepo.findUserById(notif.user_id);
+
+              const subject = `CryptoX - Price Alert for ${notif.coin_id}`;
+              const action = notif.notification_type === "PRICE_ABOVE" ? "risen above" : "dropped below";
+
+              await transporter.sendMail({
+                from: "33raghavk33@gmail.com",
+                to: user.email,
+                subject,
+                html: `
+                  <h2>CryptoX Price Alert</h2>
+                  <p>Hello ${user.name || "User"},</p>
+                  <p>Your price alert for <strong>${notif.coin_id}</strong> has been triggered!</p>
+                  <p>The coin price has ${action} your target threshold.</p>
+                  <p>Check the market on CryptoX for more details!</p>
+                `,
+              });
+
+              await alertRepo.updateNotificationStatus(notif.notification_id, "SENT");
+              console.log(`Sent alert email to ${user.email} for coin ${notif.coin_id}`);
+            } catch (err: any) {
+              console.error(`Failed to send email for notification ${notif.notification_id}:`, err.message);
+              await alertRepo.updateNotificationStatus(notif.notification_id, "FAILED");
+            }
+          }
         }
       } catch (error: any) {
         console.error("Error processing satisfied alerts:", error.message);
@@ -48,7 +72,7 @@ const setupJobs = async () => {
   console.log("Adding repeatable alert check job (every 1 minute)...");
   await alertQueue.upsertJobScheduler(
     "scheduler-process-alerts",
-    { pattern: "* * * * *" }, // every 1 minute
+    { pattern: "* * * * *" },
     { name: "process-alerts", opts: { removeOnComplete: true, removeOnFail: true } }
   );
 
