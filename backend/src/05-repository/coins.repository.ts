@@ -325,3 +325,9 @@ export const getRemainingIds = async () => {
     const result = await pool.query(query);
     return result.rows.map(row => row.coin_id);
 };
+
+export const coinExists = async (coinId: string) => {
+    const query = `SELECT 1 FROM coins WHERE coin_id = $1 LIMIT 1`;
+    const result = await pool.query(query, [coinId]);
+    return (result.rowCount ?? 0) > 0;
+};

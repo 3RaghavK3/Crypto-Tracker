@@ -5,6 +5,7 @@ import redis from "./config/redis.js";
 import errorHandler from "./02-middleware/errorHandler.js";
 import authRoutes from "./01-routes/auth.routes.js";
 import coinsRoutes from "./01-routes/coins.routes.js";
+import alertsRoutes from "./01-routes/alerts.routes.js";
 import cookieParser from "cookie-parser";
 
 dotenv.config();
@@ -51,5 +52,6 @@ app.use(cookieParser());
 app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/coins", coinsRoutes);
+app.use("/api/alerts", alertsRoutes);
 app.use(errorHandler);
 start();
