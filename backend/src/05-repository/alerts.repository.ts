@@ -51,3 +51,48 @@ export const getAlertsForUser = async (userId: number) => {
   const result = await pool.query(query, [userId]);
   return result.rows;
 };
+
+export const processSatisfiedAlerts = async () => {
+  const client = await pool.connect();
+  
+  await client.query("BEGIN");
+
+  try {
+    const { rows: alerts } = await client.query(`
+      SELECT a.user_id, a.coin_id, a.type
+      FROM alert_coins a
+      JOIN coins c ON a.coin_id = c.coin_id
+      WHERE
+        (a.type = 'PRICE_ABOVE' AND c.current_price >= a.price)
+        OR
+        (a.type = 'PRICE_BELOW' AND c.current_price <= a.price)
+    `);
+
+    for (const alert of alerts) {
+      await client.query(
+        `INSERT INTO notifications
+         (user_id, coin_id, notification_type, status, created_at)
+         VALUES ($1, $2, $3, 'PENDING', NOW())`,
+        [alert.user_id, alert.coin_id, alert.type]
+      );
+    }
+
+    for (const alert of alerts) {
+      await client.query(
+        `DELETE FROM alert_coins
+         WHERE user_id = $1
+           AND coin_id = $2
+           AND type = $3`,
+        [alert.user_id, alert.coin_id, alert.type]
+      );
+    }
+
+    await client.query("COMMIT");
+    return alerts;
+  } catch (err) {
+    await client.query("ROLLBACK");
+    throw err;
+  } finally {
+    client.release();
+  }
+};

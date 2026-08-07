@@ -8,9 +8,11 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsx watch src/server.ts",
     "worker": "tsx src/workers/market.worker.ts",
+    "worker:alerts": "tsx src/workers/alerts.worker.ts",
     "build": "tsc",
     "start": "node dist/server.js",
     "start:worker": "node dist/workers/market.worker.js",
+    "start:worker:alerts": "node dist/workers/alerts.worker.js",
     "bootstrap:markets": "tsx src/scripts/bootstrap-markets.ts",
     "bootstrap:details": "tsx src/scripts/bootstrap-details.ts"
   },
