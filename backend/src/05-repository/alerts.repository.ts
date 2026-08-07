@@ -59,7 +59,7 @@ export const processSatisfiedAlerts = async () => {
 
   try {
     const { rows: alerts } = await client.query(`
-      SELECT a.user_id, a.coin_id, a.type
+      SELECT a.user_id, a.coin_id, a.type, a.price as target_price, c.current_price
       FROM alert_coins a
       JOIN coins c ON a.coin_id = c.coin_id
       WHERE
@@ -79,7 +79,10 @@ export const processSatisfiedAlerts = async () => {
         [alert.user_id, alert.coin_id, alert.type]
       );
       if (res.rows.length > 0) {
-        insertedNotifications.push(res.rows[0]);
+        const notif = res.rows[0];
+        notif.target_price = alert.target_price;
+        notif.current_price = alert.current_price;
+        insertedNotifications.push(notif);
       }
     }
 

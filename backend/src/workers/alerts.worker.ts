@@ -33,6 +33,10 @@ const worker = new Worker(
                   <p>Hello ${user.name || "User"},</p>
                   <p>Your price alert for <strong>${notif.coin_id}</strong> has been triggered!</p>
                   <p>The coin price has ${action} your target threshold.</p>
+                  <ul>
+                    <li><strong>Target Price:</strong> $${Number(notif.target_price).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 6 })}</li>
+                    <li><strong>Current Price:</strong> $${Number(notif.current_price).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 6 })}</li>
+                  </ul>
                   <p>Check the market on CryptoX for more details!</p>
                 `,
               });
